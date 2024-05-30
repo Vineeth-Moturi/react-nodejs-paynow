@@ -3,31 +3,28 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const Footer=(props) => {
+  const current_year = new Date(); 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div class="global-footer">
+        <p class="footer-text">{props.instance.application_name ? props.instance.application_name : ''} | All Rights Reserved@{current_year.getFullYear()}</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    </>
+  )
+}
+
+function App() {
+  const [count, setCount] = useState(0)
+  const current_instance = {
+    application_name: "PayNow",
+    theme_base_color: "#cfcbcb",
+    theme_primary_color: "#cfcbcb"
+  }
+  return (
+    <>
+      <h1>test</h1>
+      <Footer instance={current_instance}/>
     </>
   )
 }
