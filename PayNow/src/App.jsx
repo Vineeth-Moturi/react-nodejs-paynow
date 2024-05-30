@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import HomeComponent from './Components/Home/HomeComponent'
+
 const Footer=(props) => {
   const current_year = new Date(); 
   return (
@@ -24,6 +26,7 @@ function App() {
   return (
     <>
       <h1>test</h1>
+      <HomeComponent></HomeComponent>
       <Footer instance={current_instance}/>
     </>
   )
