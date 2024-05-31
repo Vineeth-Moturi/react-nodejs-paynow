@@ -107,3 +107,65 @@
 >- **Vue.js**: A framework for building UIs and SPAs with a gentle learning curve and a focus on the view layer. Best for developers looking to create feature-rich, dynamic web applications with a component-based approach.
 >- **Next.js**: A React framework designed for SSR, SSG, and building production-ready web applications. Ideal for developers looking to leverage React for both client-side and server-side rendering.
 >- **Vite.js**: A modern build tool and development server that offers a fast development experience. Perfect for developers who want a lightweight and efficient toolchain for building modern web applications, regardless of the framework they use.
+
+
+
+
+# Routing
+Basic routing
+
+
+**AppRouter.jsx**
+ ```
+  import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+  import HomeComponent from './Components/Home/HomeComponent';
+  import LoginComponent from './Components/Login/LoginComponent';
+
+
+
+  const appRouting = createBrowserRouter([
+    {
+      path: "/login",
+      element: <LoginComponent />
+    },
+    {
+      path: "/home",
+      element: <HomeComponent />
+    }
+  ]);
+
+
+  const AppRouter = () => {
+    return (
+      <RouterProvider router={appRouting} />
+    )
+  }
+  export default AppRouter
+  ```
+
+**App.jsx**
+```
+import './App.css'
+import AppRouter from './AppRouter'
+
+const  App = () => {
+  return (
+    <AppRouter />
+  );
+}
+export default App
+```
+
+**main.jsx**
+```
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+```

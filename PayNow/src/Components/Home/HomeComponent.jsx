@@ -3,7 +3,7 @@
 function HomeComponent(){
     return(
         <>
-        <p>Login</p>
+        <p>Home</p>
         </>
     )
 }
