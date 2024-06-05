@@ -1,8 +1,10 @@
 # react-nodejs-paynow
 react-nodejs-practice project named as paynow
 
-#Running project
-  0. cd react-nodejs-paynow
-  1. npm install
-  2. npm run dev
-
+ Running project
+ ```
+  cd react-nodejs-paynow
+  cd Paynow
+  npm install
+  npm run dev
+ ```

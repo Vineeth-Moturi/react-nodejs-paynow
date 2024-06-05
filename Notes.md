@@ -169,3 +169,164 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>,
 )
 ```
+
+###
+
+###
+
+# React ES6
+### What is ES6?
+ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ensure a common language across different browsers. ES6 is the 6th version of ECMAScript. 
+
+### Why ES6? / Features of ES6 / Upgrades in ES6
+- React uses ES6 and all of these new features will make your coding experience in react much much better. You will be able to do things with much more ease and in very less lines!
+<details>
+<summary> See Features of ES6 / Upgrades in ES6 </summary>
+
+  Features like: 
+
+  1. Arrow Functions:
+      ```
+      const hello = () => {
+        return "Hello World!";
+      }
+
+      or
+      
+      const hello = () => "Hello World!";
+      ```
+
+  2. map(): 
+    .map() can be used for alot of things, one of it's use case is, we can make any number of cards through loop and just put it in jsx, like this:
+      ```
+      const data = ['title1', 'title2', 'title3'];
+      let cards = data.map((item) => <card>{item}</card>)
+      ```
+  3. Destructuring: 
+
+      Old Way: 
+      ```
+      const languages = ['JS', 'Python', 'Java'];
+      const js = languages[0]
+      const python = languages[1]
+      const java = languages[2]
+      ```
+
+      New Way:
+      ```
+      const languages = ['JS', 'Python', 'Java'];
+      const [ js, python, java ] = languages
+      ```
+      
+  4. Ternary Operator: With this, you can write if/else conditions in one line. It's syntax is fairly simple like this:
+  condition ? <expression if true> : <expression if false>
+
+      Example:
+      
+      ```
+      let loading = false;
+      const data = loading ? <div>Loading...</div> : <div>Data</div>
+      ```
+  5. Spread Operator: 
+      ```
+      const languages = ['JS', 'Python', 'Java'];
+      const morelanguages = ['C', 'C++', 'C#']
+      const allLanguages = [...languages, ...morelanguages]
+      ```
+      Output:
+      ["JS","Python","Java","C","C++","C#"]
+  and many more like, classes, modules.
+</details>
+
+
+###
+
+###
+
+# Styling in React
+  React can use different styling libraries
+
+
+  ### - Using styled-components package
+  <details>
+  <summary> See how to use styled-components </summary>
+
+  ### Installation
+  ```
+  npm install styled-components
+  ```
+  ### Documentation:  https://styled-components.com/docs/basics#getting-started
+  </details>
+
+  ### - Using Bootstrap
+  <details>
+  <summary> See how to use bootstrap </summary>
+
+  ### Install & Set Up Bootstrap 5 in React
+  ``` npm install bootstrap ```
+  ### Then import bootstrap.min.css from node_modules in src/App.js
+
+  ```
+  import React from 'react';
+  import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+  import './App.css';
+  function App() {
+    return (
+      <div className="App">
+        <h3>Build Sign Up & Login UI Template in React</h3>
+      </div>
+    );
+  }
+  export default App;
+  ```
+
+  Sample Example:
+
+  ```
+  import React from 'react'
+  import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+  import './App.css'
+  import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+  import Login from './components/login.component'
+  import SignUp from './components/signup.component'
+  function App() {
+    return (
+      <Router>
+        <div className="App">
+          <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+            <div className="container">
+              <Link className="navbar-brand" to={'/sign-in'}>
+                positronX
+              </Link>
+              <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul className="navbar-nav ml-auto">
+                  <li className="nav-item">
+                    <Link className="nav-link" to={'/sign-in'}>
+                      Login
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to={'/sign-up'}>
+                      Sign up
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+          <div className="auth-wrapper">
+            <div className="auth-inner">
+              <Routes>
+                <Route exact path="/" element={<Login />} />
+                <Route path="/sign-in" element={<Login />} />
+                <Route path="/sign-up" element={<SignUp />} />
+              </Routes>
+            </div>
+          </div>
+        </div>
+      </Router>
+    )
+  }
+  export default App
+  ```
+  </details>
