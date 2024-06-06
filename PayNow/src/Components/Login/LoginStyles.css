@@ -17,3 +17,21 @@
   height: 50%;
   background-color: blanchedalmond;
 }
+
+@keyframes zoomInOut {
+  0% {
+    transform: scale(1);
+  }
+  95% {
+    transform: scale(1.2); /* Adjust the scale to your preference */
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.zoom-animation {
+  animation: zoomInOut 50s infinite; /* 5s for the duration, infinite for continuous looping */
+  background-size: cover;         /* Ensure the background image covers the entire element */
+  background-position: center;    /* Center the background image */                 /* Full height */
+}

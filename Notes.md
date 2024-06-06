@@ -348,10 +348,22 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
 
   #### Documentation: https://mui.com/material-ui/ and https://m2.material.io/components
 
-  [!NOTE]
+  > [!NOTE]
   > - Pear Dependencies: Please note that [react](https://www.npmjs.com/package/react) and [react-dom](https://www.npmjs.com/package/react-dom) are peer dependencies, meaning you should ensure they are installed before installing Material UI.
 
-  [!NOTE]
+  > [!NOTE]
   > - Material UI uses the Roboto font by default. Add it to your project via Fontsource, or with the Google Fonts CDN.
   >   + Installation: ``` npm install @fontsource/roboto ```
+  > - Then you can import it in your entry point like this:
+  >   ``` 
+  >    import '@fontsource/roboto/300.css';
+  >    import '@fontsource/roboto/400.css';
+  >    import '@fontsource/roboto/500.css';
+  >    import '@fontsource/roboto/700.css';
+  >   ```
+
+  #### Icons
+  To use the [font Icon component](https://mui.com/material-ui/icons/#icon-font-icons) or the prebuilt SVG Material Icons (such as those found in the [icon demos](https://mui.com/material-ui/icons/)), you must first install the [Material Icons](https://fonts.google.com/icons?icon.set=Material+Icons) font. You can do so with npm, or with the Google Web Fonts CDN.
+
+  ``` npm install @mui/icons-material ```
   </details>
