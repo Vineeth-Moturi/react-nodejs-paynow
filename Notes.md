@@ -247,23 +247,26 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
   React can use different styling libraries
 
 
-  ### - Using styled-components package
+### # Using styled-components package
   <details>
   <summary> See how to use styled-components </summary>
 
-  ### Installation
+  #### Installation
   ```
   npm install styled-components
   ```
   ### Documentation:  https://styled-components.com/docs/basics#getting-started
   </details>
 
-  ### - Using Bootstrap
+### # Using Bootstrap
   <details>
   <summary> See how to use bootstrap </summary>
 
-  ### Install & Set Up Bootstrap 5 in React
+  #### Install & Set Up Bootstrap 5 in React
   ``` npm install bootstrap ```
+
+  ### Documentation: https://getbootstrap.com/docs or https://getbootstrap.com/docs/5.3/getting-started/introduction/
+  
   ### Then import bootstrap.min.css from node_modules in src/App.js
 
   ```
@@ -329,4 +332,26 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
   }
   export default App
   ```
+  </details>
+
+
+
+### # Using Material UI
+
+  Material UI is an open-source React component library that implements Google's Material Design. It's comprehensive and can be used in production out of the box.
+  
+  <details>
+  <summary> See how to use MUI (Material UI)</summary>
+
+  #### Installation
+  ``` npm install @mui/material @emotion/react @emotion/styled ```
+
+  #### Documentation: https://mui.com/material-ui/ and https://m2.material.io/components
+
+  [!NOTE]
+  > - Pear Dependencies: Please note that [react](https://www.npmjs.com/package/react) and [react-dom](https://www.npmjs.com/package/react-dom) are peer dependencies, meaning you should ensure they are installed before installing Material UI.
+
+  [!NOTE]
+  > - Material UI uses the Roboto font by default. Add it to your project via Fontsource, or with the Google Fonts CDN.
+  >   + Installation: ``` npm install @fontsource/roboto ```
   </details>

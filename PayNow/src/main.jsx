@@ -11,6 +11,10 @@ document.getElementById('root').style.maxHeight = '100%'
 document.getElementById('root').style.maxWidth = '100%'
 document.getElementById('root').style.display = 'flex'
 document.getElementById('root').style.flexDirection = 'column'
+const appRoot = document.getElementById('root')
+if(appRoot){
+  appRoot.classList.add('container', 'p-0')
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
