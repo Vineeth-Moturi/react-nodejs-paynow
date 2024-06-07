@@ -1,9 +1,10 @@
 ## About Project
   - Used react with Vite.js
+  - Created back-end with Node.js and Express
 
 
 
-# Creating a app
+# Creating a React app
  ```
   $npm create vite@latest paynow --template react
   $cd paynow
@@ -367,3 +368,21 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
 
   ``` npm install @mui/icons-material ```
   </details>
+
+
+
+
+###
+
+###
+
+
+# Creating Backend setup
+  - Add a backend with a database to your existing React app built on Node.js with Vite
+  - Steps:
+    - Set Up the Backend with Node.js and Express
+    - Connect to a Database (e.g., MongoDB)
+    - Set Up API Endpoints
+    - Integrate the Frontend with the Backend
+
+### 1. Set Up the Backend with Node.js and Express
