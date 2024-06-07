@@ -386,3 +386,191 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
     - Integrate the Frontend with the Backend
 
 ### 1. Set Up the Backend with Node.js and Express
+  - Create a new directory for your backend code and initialize a new Node.js project.
+    ```
+    mkdir PayNowBackend
+    cd PayNowBackend
+    npm init -y
+    ```
+  - Install Express and other necessary packages:
+    ```
+    npm install express mongoose cors
+    ```
+  - Install mongo database
+    - Documentation: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/
+    - Ensure MongoDB is installed and running on your machine
+      ``` 
+      mongod
+      ```
+
+### 2. Create a basic server in backend/server.js and connect it with mongodb
+  ```
+  const express = require('express');
+  const mongoose = require('mongoose');
+  const cors = require('cors');
+
+
+  const app = express();
+  const PORT = 5000;
+
+  // Middle-ware
+  app.use(cors());
+  app.use(express.json());
+
+
+  // Connect to mongodb
+  mongoose.connect('mongodb://localhost:27017/paynowdb');
+
+  const database = mongoose.connection;
+  database.on('error', console.error.bind(console, 'connection error:'));
+  database.once('open', () => {
+    console.log("Database connection successfull")
+  })
+
+
+
+  app.get('/', (req, res) => {
+    res.send('Hello from the backend');
+  });
+
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+  ```
+
+### 3. Define Models
+  - make sure you have your Mongoose model defined. For example, here's a Todo model:
+    ```
+    // models/Todo.js
+    const mongoose = require('mongoose');
+
+    const todoSchema = new mongoose.Schema({
+      text: {
+        type: String,
+        required: true,
+      },
+      completed: {
+        type: Boolean,
+        default: false,
+      },
+    });
+
+    module.exports = mongoose.model('Todo', todoSchema);
+    ```
+
+### 4. Set Up API Endpoints
+  - method definitions for routes in your Node.js and Express backend, you'll create functions that handle specific HTTP requests (GET, POST, PUT, DELETE, etc.). 
+    ```
+    // routes/todos.js
+    const express = require('express');
+    const Todo = require('../models/Todo');
+    const router = express.Router();
+
+    // GET all todos
+    router.get('/', async (req, res) => {
+      try {
+        const todos = await Todo.find();
+        res.json(todos);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+    });
+
+    // GET a specific todo by ID
+    router.get('/:id', async (req, res) => {
+      try {
+        const todo = await Todo.findById(req.params.id);
+        if (!todo) return res.status(404).json({ message: 'Todo not found' });
+        res.json(todo);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+    });
+
+    // CREATE a new todo
+    router.post('/', async (req, res) => {
+      const todo = new Todo({
+        text: req.body.text,
+        completed: req.body.completed || false,
+      });
+
+      try {
+        const newTodo = await todo.save();
+        res.status(201).json(newTodo);
+      } catch (err) {
+        res.status(400).json({ message: err.message });
+      }
+    });
+
+    // UPDATE a todo by ID
+    router.put('/:id', async (req, res) => {
+      try {
+        const updatedTodo = await Todo.findByIdAndUpdate(
+          req.params.id,
+          { text: req.body.text, completed: req.body.completed },
+          { new: true } // Return the updated document
+        );
+        if (!updatedTodo) return res.status(404).json({ message: 'Todo not found' });
+        res.json(updatedTodo);
+      } catch (err) {
+        res.status(400).json({ message: err.message });
+      }
+    });
+
+    // DELETE a todo by ID
+    router.delete('/:id', async (req, res) => {
+      try {
+        const todo = await Todo.findByIdAndDelete(req.params.id);
+        if (!todo) return res.status(404).json({ message: 'Todo not found' });
+        res.json({ message: 'Todo deleted' });
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+    });
+
+    module.exports = router;
+    ```
+
+### 5. Use Routes in Your Server
+  - Update your main server file to use the defined routes:
+    ```
+    // server.js
+    const express = require('express');
+    const mongoose = require('mongoose');
+    const cors = require('cors');
+    const todoRoutes = require('./routes/todos');
+
+    const app = express();
+    const PORT = 5000;
+
+    // Middleware
+    app.use(cors());
+    app.use(express.json());
+
+    // Connect to MongoDB
+    mongoose.connect('mongodb://localhost:27017/yourdbname', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', () => {
+      console.log('Connected to MongoDB');
+    });
+
+    // Use todo routes
+    app.use('/api/todos', todoRoutes);
+
+    // Define a simple route
+    app.get('/', (req, res) => {
+      res.send('Hello from the backend');
+    });
+
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+    ```
+
