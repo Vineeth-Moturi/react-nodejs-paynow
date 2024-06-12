@@ -20,6 +20,7 @@ database.once('open', () => {
   console.log("Database connection successfull")
 })
 
+// Routes
 const appRouter = require('./routes/authRoutes');
 app.use('/api', appRouter)
 

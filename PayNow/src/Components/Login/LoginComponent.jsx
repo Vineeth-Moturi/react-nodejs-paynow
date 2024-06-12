@@ -7,7 +7,7 @@ import loginBg from '../../assets/loginBgPaynow.jpg'
 // style={{backgroundColor: '#003F80'}}
 function LoginComponent(){
   return(
-    <div className="d-flex w-100 h-100 overflow-y-auto align-items-center justify-content-center zoom-animation" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+    <div className="d-flex w-100 h-100 align-items-center justify-content-center zoom-animation" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
       <div className="d-flex flex-column align-items-center justify-content-center rounded-2" >
         <div className="card rounded-3 border-0 m-2 align-items-center w-100">
           <div className="row">
@@ -27,4 +27,10 @@ function LoginComponent(){
     
   );
 }
+
+
+function signUp(){
+
+}
+
 export default LoginComponent;

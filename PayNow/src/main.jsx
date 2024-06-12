@@ -11,6 +11,7 @@ document.getElementById('root').style.maxHeight = '100%'
 document.getElementById('root').style.maxWidth = '100%'
 document.getElementById('root').style.display = 'flex'
 document.getElementById('root').style.flexDirection = 'column'
+document.getElementById('root').style.overflow = 'hidden'
 const appRoot = document.getElementById('root')
 if(appRoot){
   appRoot.classList.add('container', 'p-0')

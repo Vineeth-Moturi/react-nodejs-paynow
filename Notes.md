@@ -574,3 +574,89 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
     });
     ```
 
+####
+
+
+# React Event Handling
+  ### Events
+  - Every HTML attribute in React is written in camelCase syntax. Event is also an attribute. Hence, written in camelCase.
+  - As we learnt variables, states, javascript operations are written in curly braces {}, same is true with React event handlers too! Like this: onClick={show}
+    ```
+    <button onClick={show}>Show</button>
+    ``` 
+  ### Arguments in events
+  - We can't pass arguments just like that, it will give syntax error. First, we need to put the whole function in arrow function, like this:
+    ```
+    <button onClick={ ()=>show('true') }>Show</button>
+    ```
+  ### React Event Object
+  - Event handler can be provided to the function like this:
+    ```
+    <button onClick={ (event)=>show('true', event) }>Show</button>
+    ```
+
+  ###### Example
+  ```
+  import React from "react";
+  import loginBg from '../../assets/loginBgPaynow.jpg';
+  import { useState } from "react";
+
+  function SignUpComponent(){
+    const [useremail, setUseremail] = useState("");
+    const [password, setPassword] = useState("");
+
+    return (
+      <div className="d-flex w-100 h-100 align-items-center justify-content-center zoom-animation" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
+        <div className="d-flex flex-column align-items-center justify-content-center rounded-2" >
+          <div className="card rounded-3 border-0 m-2 align-items-center w-100">
+            <div className="row">
+              <h2>SignUp</h2>
+            </div>
+            <div className="mt-2 mb-2">
+              <input type="text" name="useremail" value={useremail} onChange={ (e)=> { setUseremail(e.target.value)}} className="form-control " placeholder="Email"></input>
+              <input type="password" name="password" value={password} onChange={ (e)=> { setPassword(e.target.value)}} className="form-control mt-1" placeholder="Password"></input>            
+            </div>
+            <div className="mt-2 mb-2">
+              <button className="btn" onClick={()=>submitSignUpDetails({useremail}, {password})} style={{color: "rgb(255 233 230)", backgroundColor: "#003F80"}}>
+                SignUp
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  export default SignUpComponent;
+
+  function submitSignUpDetails(useremail, password){
+    console.log("useremail",useremail)
+    console.log("password",password)
+  }
+  ```
+
+#####
+
+# Integrate the Frontend with the Backend
+  - In your React app (built with Vite), you can use fetch or a library like axios to interact with your backend API.
+  ##### Ensure you have axios installed in your React project:
+  ``` npm install axios ```
+
+  ##### Create a service to interact with the backend API in src/services/todoService.js:
+  ```
+  import axios from 'axios';
+
+  const API_URL = 'http://localhost:5000/api/todos';
+
+  export const getTodos = async () => {
+    const response = await axios.get(API_URL);
+    return response.data;
+  };
+
+  export const createTodo = async (todo) => {
+    const response = await axios.post(API_URL, todo);
+    return response.data;
+  };
+  ```
+
+  
+
