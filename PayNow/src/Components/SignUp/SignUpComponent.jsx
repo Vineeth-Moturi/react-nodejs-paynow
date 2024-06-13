@@ -1,13 +1,23 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom'
 import loginBg from '../../assets/loginBgPaynow.jpg';
 import { useState } from "react";
-import {signupApi} from '../../Services/AuthService';
+import {isUserLoggedIn, setUserLoggedIn , signupApi} from '../../Services/AuthService';
 
 function SignUpComponent(){
   const [username, setUsername] = useState("");
   const [useremail, setUseremail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const navigate = useNavigate();
+
+  const submitSignUpDetails = async () => {
+    const res = await signupApi({username: username, useremail: useremail, password: password})
+    if(res.status = 201){
+      setUserLoggedIn(true)
+      navigate("/home")
+    }
+    console.log("isUserLoggedIn", isUserLoggedIn)
+  }
 
   return (
     <div className="d-flex w-100 h-100 align-items-center justify-content-center zoom-animation" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
@@ -22,7 +32,7 @@ function SignUpComponent(){
             <input type="password" name="password" value={password} onChange={ (e)=> { setPassword(e.target.value)}} className="form-control mt-1" placeholder="Password"></input>            
           </div>
           <div className="mt-2 mb-2">
-            <button className="btn" onClick={()=>submitSignUpDetails({username}, {useremail}, {password})} style={{color: "rgb(255 233 230)", backgroundColor: "#003F80"}}>
+            <button className="btn" onClick={submitSignUpDetails} style={{color: "rgb(255 233 230)", backgroundColor: "#003F80"}}>
               SignUp
             </button>
           </div>
@@ -32,7 +42,3 @@ function SignUpComponent(){
   )
 }
 export default SignUpComponent;
-
-function submitSignUpDetails(username, useremail, password){
-  signupApi({username: username.username, useremail: useremail.useremail, password: password.password})
-}

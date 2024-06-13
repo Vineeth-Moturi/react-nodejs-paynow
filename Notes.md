@@ -658,5 +658,135 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
   };
   ```
 
-  
+  ###### Example (src/Services/AuthService.jsx)
+  ```
+  import axios from 'axios';
+  import { API_BASE_URL } from '../Config';
+
+  const BASE_URL = API_BASE_URL;
+
+
+  export const loginApi = async (data)=>{
+    const loginURL = BASE_URL + "/login";
+    const response = await axios.post(loginURL, data);
+    response.data;
+  }
+
+  export const signupApi = async (data)=>{
+    const singupUrl = BASE_URL + "/signup";
+    const response = await axios.post(singupUrl, data);
+    return response;
+  }
+  ```
+
+  ##### And using AuthService.js in Signup component
+  ```
+  import React from "react";
+  import { useNavigate } from 'react-router-dom'
+  import loginBg from '../../assets/loginBgPaynow.jpg';
+  import { useState } from "react";
+  import {signupApi} from '../../Services/AuthService';
+
+  function SignUpComponent(){
+    const [username, setUsername] = useState("");
+    const [useremail, setUseremail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const submitSignUpDetails = async () => {
+      const res = await signupApi({username: username, useremail: useremail, password: password})
+      if(res.status = 201){
+        navigate("/home")
+      }
+    }
+
+    return (
+      <div className="d-flex w-100 h-100 align-items-center justify-content-center zoom-animation" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
+        <div className="d-flex flex-column align-items-center justify-content-center rounded-2" >
+          <div className="card rounded-3 border-0 m-2 align-items-center w-100">
+            <div className="row">
+              <h2>SignUp</h2>
+            </div>
+            <div className="mt-2 mb-2">
+              <input type="text" name="username" value={username} onChange={ (e)=> { setUsername(e.target.value)}} className="form-control mb-1" placeholder="Username"></input>
+              <input type="text" name="useremail" value={useremail} onChange={ (e)=> { setUseremail(e.target.value)}} className="form-control " placeholder="Email"></input>
+              <input type="password" name="password" value={password} onChange={ (e)=> { setPassword(e.target.value)}} className="form-control mt-1" placeholder="Password"></input>            
+            </div>
+            <div className="mt-2 mb-2">
+              <button className="btn" onClick={submitSignUpDetails} style={{color: "rgb(255 233 230)", backgroundColor: "#003F80"}}>
+                SignUp
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  export default SignUpComponent;
+  ```
+
+###
+
+###
+
+# React routing
+### Using React Router with useNavigate from react-router-dom
+
+  ```
+  import React from "react";
+  import { useNavigate } from 'react-router-dom'
+
+  function SignUpComponent(){
+    const navigate = useNavigate();
+
+    const navigateToHome = async () => {
+      navigate("/home")
+    }
+
+    return(
+      <button className="btn" onClick={navigateToHome}></button>
+    )
+  }
+  export default SignUpComponent;
+  ```
+
+
+
+# React Hooks
+  - Hooks let you use state and other React features without writing a class. Although states have largely replaced classes in React, there is no plan of removing classes from React.
+  - ### Things you need to keep in mind while using hooks:
+    - You must import hook from react.
+    - Hooks can only be called in React Function Components, that is
+      ```
+      // import statements
+      // Can't call here
+      const Blogs = () => {
+          // Can call here
+          return <h1>Blogs</h1>;
+      };
+
+      export default Blogs;
+      ```
+    - Hook cannot be in conditional
+    - Hooks cannot work in React Class Components
+    - Hooks can only be called at the top level of a component, meaning it can't be called from inside a block, i.e. {}. So, can't be called inside if, loops or any block, Example
+      ```
+      const Blogs = () => {
+          // Can call here
+          if (true){
+              // Can't call here
+          }
+          return <h1>Blogs</h1>;
+      };
+
+      export default Blogs;
+      ```
+  - ### React Hook Types
+    1. #### React useState
+    2. #### React useEffect
+    3. #### React useContext
+    4. #### React useRef
+    5. #### React useReducer
+    6. #### React useCallback
+    7. #### React useMemo
 
