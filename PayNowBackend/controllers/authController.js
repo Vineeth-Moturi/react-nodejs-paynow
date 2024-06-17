@@ -1,5 +1,7 @@
 const User = require('../Models/User')
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const authConfig = require('../Config/AuthConfig');
 
 
 async function signupHandler(req, res){
@@ -13,6 +15,7 @@ async function signupHandler(req, res){
 
   try {
     const success = await user.save()
+    const token  = jwt.sign({userId: user.id}, authConfig.JWT_SECRET, {expiresIn: authConfig.JWT_SECRET_EXPIRATION});
     res.status(201).json({status: 'User successfully created', success: success})
   }catch(err){
     res.status(401).json({status: "Un-authorised", err: err})

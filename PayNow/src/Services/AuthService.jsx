@@ -5,7 +5,7 @@ import { API_BASE_URL } from '../Config';
 
 const BASE_URL = API_BASE_URL;
 
-export const [isUserLoggedIn, setUserLoggedIn] = useState('');
+// export const [isUserLoggedIn, setUserLoggedIn] = useState('');
 
 export const loginApi = async (data)=>{
   const loginURL = BASE_URL + "/login";

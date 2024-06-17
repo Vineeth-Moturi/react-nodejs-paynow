@@ -2,7 +2,8 @@ import React from "react";
 import { useNavigate } from 'react-router-dom'
 import loginBg from '../../assets/loginBgPaynow.jpg';
 import { useState } from "react";
-import {isUserLoggedIn, setUserLoggedIn , signupApi} from '../../Services/AuthService';
+// import {isUserLoggedIn, setUserLoggedIn} from '../../Services/AuthService';
+import {signupApi}  from '../../Services/AuthService';
 
 function SignUpComponent(){
   const [username, setUsername] = useState("");
@@ -13,10 +14,10 @@ function SignUpComponent(){
   const submitSignUpDetails = async () => {
     const res = await signupApi({username: username, useremail: useremail, password: password})
     if(res.status = 201){
-      setUserLoggedIn(true)
+      // setUserLoggedIn(true)
       navigate("/home")
     }
-    console.log("isUserLoggedIn", isUserLoggedIn)
+    // console.log("isUserLoggedIn", isUserLoggedIn)
   }
 
   return (

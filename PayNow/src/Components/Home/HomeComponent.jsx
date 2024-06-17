@@ -1,10 +1,18 @@
-
+import { useState, useEffect } from "react"
 
 function HomeComponent(){
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    setTimeout(()=>{
+      setCount((count)=> count+1);
+    }, 1000)
+  });
+
   return(
     <>
-    <p>Home</p>
+    <h1>I have rendered {count} times!</h1>;
     </>
   )
 }
-export default HomeComponent
+export default HomeComponent;

@@ -782,11 +782,421 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
       export default Blogs;
       ```
   - ### React Hook Types
-    1. #### React useState
-    2. #### React useEffect
-    3. #### React useContext
-    4. #### React useRef
-    5. #### React useReducer
-    6. #### React useCallback
-    7. #### React useMemo
+  1. **React useState**
+  2. **React useEffect**
+  3. **React useContext**
+  4. **React useRef**
+  5. **React useReducer**
+  6. **React useCallback**
+  7. **React useMemo**
 
+  ### React useState
+  - useState is a hook, which used to add a state to react component
+  - That means, with this we can assign/update a variable/state in the component
+
+  <details>
+  <summary>
+    See how _useState_ works
+  </summary>
+
+  ###### Initializing useState
+  ```
+  import { useState } from "react";
+
+  const App = () => {
+    const [name, setName] = useState("");
+  }
+  ```
+  - useState takes initial state as argument and gives a state and a function(setName in this case) to update that state as we can't directly change/update a state. Also, these state names are just like variables, hence you can name them anything you like.
+  - Question: In react why we can't directly change/update a state?
+    - In React, you can't directly change or update a state because React needs to be aware of the state changes to properly manage and render the user interface. Directly modifying the state can lead to unexpected behavior and issues with rendering, as React won't know that the state has changed.
+
+  ###### Reading a state
+  ```
+  import { useState } from "react";
+
+  const App = () => {
+    const [name, setName] = useState('')
+    return <h1>My name is {name}</h1>
+  };
+  ```
+  - useState returns a state and a function to change/update that state. Hence, everything is stored in name
+
+  ###### Updating a state
+  ```
+  import { useState } from "react";
+
+  const App = () => {
+      const [name, setName] = useState('')
+      setName('Rajesh')
+
+      return <h1>My name is {name}</h1>
+  };
+  ```
+
+  ###### Question: What can state hold?
+  - Like normal variables, state can hold any datatype like **_strings_** , **_numbers_** , **_booleans_** , **_arrays_** , **_objects_** , objects in arrays, arrays in objects.
+  - Example: 
+    ```
+    import { useState } from "react";
+
+    const App = () => {
+      const [data, setData] = useState({
+        name: 'lovish',
+        age: 21
+      })
+
+      return <>
+        <h1>My name is {data.name} and my age is {data.age}</h1>
+        <button onClick={() => setData({ ...data, name: 'CWH' })}>Click Me</button></>
+    };
+
+    export default App;
+    ```
+
+  </details>
+
+
+  ### React useEffect
+  - useEffect allow you perform side effects in your component
+  - useEffect is a function which accepts two arguments. The second one is optional.
+  <details>
+  <summary>
+    See how **_useEffects_** works
+  </summary>
+  
+  > [!NOTE] 
+  > Note: useEffect will work and act like ngOnInit, afterViewInit, ngOnChanges on Angular. That means it execute/render its contents in all these 3 use cases with usage of one useEffect
+
+  ###### Runs on every render:
+  
+  - Observe Below Example: 
+    ```
+    import { useState, useEffect } from "react"
+
+    function HomeComponent(){
+      const [count, setCount] = useState("");
+      console.log("before line useEffect Rendered", count)
+
+      useEffect(() => {
+        console.log("useEffect Rendered", count)
+        setTimeout(()=>{
+          setCount((count)=> count+1);
+        }, 1000)
+      });
+
+      console.log("After line useEffect Rendered", count)
+      return(
+        <>
+        <h1>I have rendered {count} times!</h1>;
+        </>
+      )
+    }
+    export default HomeComponent
+    ```
+  - It Gives Output as:
+    ```
+    before line useEffect Rendered 
+    After line useEffect Rendered 
+    before line useEffect Rendered 
+    After line useEffect Rendered 
+    useEffect Rendered 
+    useEffect Rendered 
+    ```
+
+  ###### Runs on first render:
+
+  - Observe below example:
+    ```
+    import { useState, useEffect } from "react"
+
+    function HomeComponent(){
+      const [count, setCount] = useState(0);
+
+      useEffect(() => {
+        setTimeout(()=>{
+          setCount((count)=> count+1);
+        }, 1000)
+      });
+
+      return(
+        <>
+        <h1>I have rendered {count} times!</h1>;
+        </>
+      )
+    }
+    export default HomeComponent;
+    ```
+
+    ###### Runs when data changes
+
+  - Observe below example:
+    ```
+    import { useState, useEffect} from 'react';
+
+    function HomeComponent(){
+      const [count, setCount] = useState(0);
+      const [data, setData] = useState('');
+
+      useEffect(() => {
+        setCount((count) => count+1)
+      }, [data]);
+
+      const handleDataChange = (e)=>{
+        setData(e.target.data)
+      }
+
+      return(
+        <input onChanges={handleDataChange} value={data} />
+      );
+    }
+    ```
+  </details>
+
+
+  ## #TODO react hooks remaining
+
+
+
+  # Authentication and Authorization
+
+  ### Authentication
+  - For authenticating we can use password based flow, with encryption
+  - For encryption, we can use **bcrypt**
+    ##### Installation
+      ```npm install bcrypt```
+    ##### Usage
+    ```
+    // authController.js
+    const User = require('../Models/User')
+    const bcrypt = require('bcrypt');
+
+    async function signupHandler(req, res){
+      const {username, useremail, password} = req.body;
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = new User({
+        username: username,
+        useremail: useremail,
+        password: hashedPassword
+      });
+
+      try {
+        const success = await user.save()
+        res.status(201).json({status: 'User successfully created', success: success})
+      }catch(err){
+        res.status(401).json({status: "Un-authorised", err: err})
+      }
+    }
+
+    async function loginHanlder(req, res){
+      const {useremail, password} = req.body;
+      try {
+        const user = await User.find({useremail: useremail});
+        if (user){
+          const pass_match = await bcrypt.compare(password, user.password)
+          if(pass_match){
+            res.status(200).json({status: "success", message: "Login successfull"})
+          }else{
+            res.status(401).json({status: "Un-authorised", message: "Login failed"})
+          }
+        }
+      }catch (err){
+        res.status(401).json({status: "Un-authorised", message: "Login failed"})
+      }
+    }
+    ```
+
+    ### Within model also we can use methods for encryption
+    ```
+    // ./Models/User.js
+    const mongoose = require('mongoose');
+    const bcrypt = require('bcryptjs');
+
+    const UserSchema = new mongoose.Schema({
+      username: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+      email: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+      password: {
+        type: String,
+        required: true,
+      },
+    });
+
+    // Password hashing middleware
+    UserSchema.pre('save', async function (next) {
+      if (!this.isModified('password')) return next();
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
+      next();
+    });
+
+    // Method to compare password
+    UserSchema.methods.comparePassword = function (password) {
+      return bcrypt.compare(password, this.password);
+    };
+
+    module.exports = mongoose.model('User', UserSchema);
+    ```
+
+  ### API request Authentication
+  - For providing better security on Authentication over **api requests**, we can use few approches.
+    - ###### JWT(JSON Web Token) Usage:
+      - **Installation**: ``` npm install jsonwebtoken ```
+      - Usage(backend):
+        ```
+        // ./controllers/authController.js
+        const User = require('../Models/User')
+        const bcrypt = require('bcrypt');
+        const jwt = require("jsonwebtoken");
+        const authConfig = require('../Config/AuthConfig');
+
+
+        async function signupHandler(req, res){
+          const {username, useremail, password} = req.body;
+          const hashedPassword = await bcrypt.hash(password, 10);
+          const user = new User({
+            username: username,
+            useremail: useremail,
+            password: hashedPassword
+          });
+
+          try {
+            const success = await user.save()
+            const token  = jwt.sign({userId: user.id}, authConfig.JWT_SECRET, {expiresIn: authConfig.JWT_SECRET_EXPIRATION}); //JWT USAGE
+            res.status(201).json({token: token, status: 'User successfully created', success: success})
+          }catch(err){
+            res.status(401).json({status: "Un-authorised", err: err})
+          }
+        }
+
+        // Here JWT_SECRET = 'string'
+        // Here JWT_SECRET_EXPIRATION is expiration time, can be '1h', '4h'
+        ```
+        
+      - Create Middleware to Authenticate Token
+        ```
+        // middleware/authenticateToken.js
+        const jwt = require('jsonwebtoken');
+
+        const JWT_SECRET = 'your_jwt_secret'; // Use environment variable in production
+
+        const authenticateToken = (req, res, next) => {
+          const token = req.header('Authorization')?.split(' ')[1];
+
+          if (!token) {
+            return res.status(401).json({ message: 'No token, authorization denied' });
+          }
+
+          try {
+            const decoded = jwt.verify(token, JWT_SECRET);
+            req.user = decoded;
+            next();
+          } catch (err) {
+            res.status(401).json({ message: 'Token is not valid' });
+          }
+        };
+
+        module.exports = { authenticateToken };
+        ```
+        ```
+        // server.js
+        const express = require('express');
+        const mongoose = require('mongoose');
+        const authRoutes = require('./routes/auth');
+        const { authenticateToken } = require('./middleware/authenticateToken');
+
+        const app = express();
+        const PORT = process.env.PORT || 5000;
+
+        // Middleware
+        app.use(express.json());
+
+        // Routes
+        app.use('/api/auth', authRoutes);
+
+        // Protected route example
+        app.get('/api/protected', authenticateToken, (req, res) => {
+          res.json({ message: 'This is a protected route', user: req.user });
+        });
+        ```
+
+      - Usage(Frontend): pass the token as authorization header
+        ```
+        Authorization: Bearer <your_jwt_token>
+        ```
+    - ###### Session-based authentication Usage:
+      - Implementing a session-based authentication system in Node.js typically involves using Express.js and a session middleware such as express-session. This approach stores session data on the server-side, which can provide advantages in terms of security and control over session management.
+      - **Installation**:  ```npm install express-session```
+      - Usage: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####
+
+# General Questions
+<details>
+  <summary>
+    See the list of general questions
+  </summary>
+
+  1. Should we use only `const`, for varialble declaration/creation. Or any other ways?
+      - In JavaScript (and by extension, in Node.js and React), you have three main ways to declare variables: var, let, and const. Each has its own use cases and characteristics.
+      - const:
+        - Use for constants: When you have a variable that should not be reassigned after its initial value is set, use const. This helps prevent bugs and makes your code easier to understand.
+        - Immutability: Note that const does not make the value immutable if the value is an object or array. It only ensures that the binding to the value cannot be changed.
+          ```
+          const PI = 3.14159;
+          // PI = 3.14; // This will throw an error
+
+          const person = { name: 'John' };
+          person.name = 'Jane'; // This is allowed
+          // person = { name: 'Doe' }; // This will throw an error
+          ```
+      - let:
+        - Block Scope: Use let when you need a variable that is limited to the block, statement, or expression where it is used. This is particularly useful in loops or conditional statements.
+        - Reassignment: Unlike const, variables declared with let can be reassigned.
+          ```
+          let counter = 0;
+          if (true) {
+            let counter = 1; // This `counter` is different from the outer `counter`
+            console.log(counter); // 1
+          }
+          console.log(counter); // 0
+          ```
+      - var:
+        - Function Scope: var is function-scoped, which can lead to confusion and bugs if not used carefully. It’s generally recommended to avoid var in favor of let and const.
+        - Hoisting: Variables declared with var are hoisted to the top of their scope, which can lead to unexpected behavior.
+          ```
+          function test() {
+            console.log(x); // undefined
+            var x = 5;
+            console.log(x); // 5
+          }
+          test();
+          ```
+</details>
