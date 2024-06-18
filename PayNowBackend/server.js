@@ -1,23 +1,49 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const session = require('express-session');
+const dotenv = require('dotenv')
+const authConfig = require('./Config/AuthConfig');
 
+
+// Env loader
+dotenv.config({
+  path: process.env.NODE_ENV == 'production' ? './production.env' : './development.env'
+})
 
 const app = express();
 const PORT = 5000;
 
 // Middle-ware
-app.use(cors());
+app.use(cors({
+  origin: authConfig.FRONTEND_BASE_URL,
+  credentials: true
+}));
+
 app.use(express.json());
+app.use(session({
+  secret: authConfig.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }, // Set to true if using HTTPS
+}))
+
+function isAuthenticated(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    res.status(401).send('Invalid session');
+  }
+}
 
 
 // Connect to mongodb
-mongoose.connect('mongodb://localhost:27017/paynowdb');
+mongoose.connect(authConfig.MONGODB_URL);
 
 const database = mongoose.connection;
 database.on('error', console.error.bind(console, 'connection error:'));
 database.once('open', () => {
-  console.log("Database connection successfull")
+  console.log("Database connection: successfull")
 })
 
 // Routes
@@ -25,11 +51,13 @@ const appRouter = require('./routes/authRoutes');
 app.use('/api', appRouter)
 
 
-app.get('/', (req, res) => {
+app.get('/api/authenticate', isAuthenticated, (req, res) => {
   res.send('Hello from the paynow backend');
 });
 
+
 // Start the server
 app.listen(PORT, () => {
+  console.log('Initializing Server..')
   console.log(`Server is running on http://localhost:${PORT}`);
 });

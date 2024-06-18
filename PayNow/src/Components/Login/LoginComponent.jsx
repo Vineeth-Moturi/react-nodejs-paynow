@@ -3,8 +3,6 @@ import './LoginStyles.css'
 import loginBg from '../../assets/loginBgPaynow.jpg'
 
 
-// Component Implemented in Bootstrap #FFEC51
-// style={{backgroundColor: '#003F80'}}
 function LoginComponent(){
   return(
     <div className="d-flex w-100 h-100 align-items-center justify-content-center zoom-animation" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>

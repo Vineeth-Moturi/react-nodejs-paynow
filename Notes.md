@@ -342,10 +342,11 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
   Material UI is an open-source React component library that implements Google's Material Design. It's comprehensive and can be used in production out of the box.
   
   <details>
-  <summary> See how to use MUI (Material UI)</summary>
+    <summary> 
+      See how to use MUI (Material UI)
+    </summary>
 
-  #### Installation
-  ``` npm install @mui/material @emotion/react @emotion/styled ```
+  #### Installation: ``` npm install @mui/material @emotion/react @emotion/styled ```
 
   #### Documentation: https://mui.com/material-ui/ and https://m2.material.io/components
 
@@ -365,7 +366,6 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
 
   #### Icons
   To use the [font Icon component](https://mui.com/material-ui/icons/#icon-font-icons) or the prebuilt SVG Material Icons (such as those found in the [icon demos](https://mui.com/material-ui/icons/)), you must first install the [Material Icons](https://fonts.google.com/icons?icon.set=Material+Icons) font. You can do so with npm, or with the Google Web Fonts CDN.
-
   ``` npm install @mui/icons-material ```
   </details>
 
@@ -1047,7 +1047,7 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
 
   ### API request Authentication
   - For providing better security on Authentication over **api requests**, we can use few approches.
-    - ###### JWT(JSON Web Token) Usage:
+    - ##### JWT(JSON Web Token) Usage:
       - **Installation**: ``` npm install jsonwebtoken ```
       - Usage(backend):
         ```
@@ -1131,10 +1131,184 @@ ES6 stands for ECMAScript 6. ECMAScript is a JavaScript standard intended to ens
         ```
         Authorization: Bearer <your_jwt_token>
         ```
-    - ###### Session-based authentication Usage:
+    - ##### Session-based authentication Usage:
       - Implementing a session-based authentication system in Node.js typically involves using Express.js and a session middleware such as express-session. This approach stores session data on the server-side, which can provide advantages in terms of security and control over session management.
       - **Installation**:  ```npm install express-session```
       - Usage: 
+        ```
+        // ./server.js
+        const express = require('express');
+        const mongoose = require('mongoose');
+        const cors = require('cors'); // USAGE
+        const session = require('express-session'); // USAGE
+
+        const app = express();
+        const PORT = 5000;
+
+        // Middle-ware
+        app.use(cors({                            // USAGE
+          origin: authConfig.FRONTEND_BASE_URL,   // USAGE
+          credentials: true                       // USAGE
+        }));                                      // USAGE
+
+        app.use(express.json());
+        app.use(session({                         // USAGE
+          secret: authConfig.SESSION_SECRET,      // USAGE
+          resave: false,                          // USAGE
+          saveUninitialized: true,                // USAGE
+          cookie: { secure: false }, // Set to true if using HTTPS
+        }))                                       // USAGE
+
+        function isAuthenticated(req, res, next) {    // USAGE
+          if (req.session.user) {                     // USAGE
+            next();                                   // USAGE
+          } else {                                    // USAGE
+            res.status(401).send('Invalid session');  // USAGE
+          }
+        }
+
+        // Connect to mongodb
+        mongoose.connect(authConfig.MONGODB_URL);
+
+        const database = mongoose.connection;
+        database.on('error', console.error.bind(console, 'connection error:'));
+        database.once('open', () => {
+          console.log("Database connection: successfull")
+        })
+
+        // Routes
+        const appRouter = require('./routes/authRoutes');
+        app.use('/api', appRouter)
+
+
+        app.get('/api/authenticate', isAuthenticated, (req, res) => {     // USAGE
+          res.send('Hello from the paynow backend');
+        });
+
+
+        // Start the server
+        app.listen(PORT, () => {
+          console.log('Initializing Server..')
+          console.log(`Server is running on http://localhost:${PORT}`);
+        });
+
+
+        // Here FRONTEND_BASE_URL = 'http://localhost:5173'
+        // SESSION_SECRET = 'kitty cat'
+        // MONGODB_URL = 'mongodb://localhost:27017/paynowdb'
+        ```
+
+        ```
+        // ./controllers/authController.js
+        const User = require('../Models/User')
+        const bcrypt = require('bcrypt');
+        const jwt = require("jsonwebtoken");
+        const authConfig = require('../Config/AuthConfig');
+
+
+        async function signupHandler(req, res){
+          const {username, useremail, password} = req.body;
+          const hashedPassword = await bcrypt.hash(password, 10);
+          const user = new User({
+            username: username,
+            useremail: useremail,
+            password: hashedPassword
+          });
+
+          try {
+            const success = await user.save()
+            const token  = jwt.sign({userId: user.id}, authConfig.JWT_SECRET, {expiresIn: authConfig.JWT_SECRET_EXPIRATION});
+            req.session.user = { useremail: user.useremail}       // USAGE
+            res.status(201).json({status: 'User successfully created', success: success})
+          }catch(err){
+            res.status(401).json({status: "Un-authorised", err: err})
+          }
+        }
+
+
+        async function loginHanlder(req, res){
+          const {useremail, password} = req.body;
+          try {
+            const user = await User.find({useremail: useremail});
+            if (user){
+              const pass_match = await bcrypt.compare(password, user.password)
+              if(pass_match){
+                req.session.user = { useremail: user.useremail}    // USAGE
+                res.status(200).json({status: "success", message: "Login successfull"})
+              }else{
+                res.status(401).json({status: "Un-authorised", message: "Login failed"})
+              }
+            }
+          }catch (err){
+            res.status(401).json({status: "Un-authorised", message: "Login failed"})
+          }
+        }
+
+        async function logoutHandler(req, res){
+          req.session.destroy(err => {                            // USAGE
+            if(err){
+              return res.status(500).json({message: "Unable to logout, something went wrong"})
+            }
+            res.status(200).json({message: "user logged out"})
+          });
+        }
+
+
+        module.exports = { signupHandler, loginHanlder, logoutHandler};
+        ```
+      - On React side
+        ```
+        // PayNow/src/Helpers/AxiosApiHelper.jsx
+        import axios from "axios";
+        import { API_BASE_URL } from "../Config";
+
+        const axiosInstance = axios.create({
+          baseURL: API_BASE_URL,
+          withCredentials: true, // This allows axios to send cookies with requests
+        });
+
+        export default axiosInstance;
+        ```
+        ```
+        // PayNow/src/Services/AuthService.jsx
+        import { useState } from 'react';
+        import axios from 'axios';
+        import { API_BASE_URL } from '../Config';
+        import axiosInstance from '../Helpers/AxiosApiHelper'
+
+        const BASE_URL = API_BASE_URL;
+
+        export const loginApi = async (data)=>{
+          const loginURL = BASE_URL + "/login";
+          const response = await axiosInstance.post(loginURL, data);
+          response.data;
+        }
+
+        export const signupApi = async (data)=>{
+          const singupUrl = BASE_URL + "/signup";
+          const response = await axiosInstance.post(singupUrl, data);
+          return response;
+        }
+
+        export const logoutApi = async ()=>{
+          const logoutUrl = BASE_URL + '/logout'
+          const resp = await axiosInstance.get(logoutUrl)
+          return resp;
+        }
+        ```
+        ```
+        // PayNow/src/Components/Logout/LogoutComponent.jsx
+        import {React , useEffect } from 'react';
+        import {logoutApi} from '../../Services/AuthService'
+
+        function LogoutComponent(){
+          useEffect(()=>{
+            const logout = logoutApi();
+          })
+        }
+
+        export default LogoutComponent;
+        ```
 
 
 
