@@ -3,24 +3,28 @@ import HomeComponent from './Components/Home/HomeComponent';
 import LoginComponent from './Components/Login/LoginComponent';
 import SignUpComponent from './Components/SignUp/SignUpComponent';
 import LogoutComponent from './Components/Logout/LogoutComponent';
-
+import SomethingWentWrong from './Components/ErrorScreenComponents/SomethingWentWrong';
 
 const appRouting = createBrowserRouter([
   {
     path: "/login",
-    element: <LoginComponent />
+    element: <LoginComponent />,
+    errorElement: <SomethingWentWrong />
   },
   {
     path: "/signup",
-    element: <SignUpComponent />
+    element: <SignUpComponent />,
+    errorElement: <SomethingWentWrong />
   },
   {
     path: "/home",
-    element: <HomeComponent />
+    element: <HomeComponent />,
+    errorElement: <SomethingWentWrong />
   },
   {
     path: "/logout",
-    element: <LogoutComponent />
+    element: <LogoutComponent />,
+    errorElement: <SomethingWentWrong />
   }
 ]);
 
