@@ -1,23 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from '@mui/material/Box';
-import { TextField } from "@mui/material";
-import Paper from '@mui/material/Paper';
-import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
+import Typography from '@mui/material/Typography';
+import Button  from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 import './LoginStyles.css'
 import loginAbrsract1 from '../../assets/loginAbrsract1.jpg'
+import { loginApi } from '../../Services/AuthService';
 
 
-// const loginImgPaper = styled(Paper)(({theme}) => ({
-//   width: 120,
-//   height: 120,
-//   textAlign: 'center',
-//   padding: theme.spacing(2),
-//   ...theme.typography.body2
-// }));
 
 function LoginComponent(){
+  const [useremail, setUseremail] = useState('');
+  const [password, setpassword] = useState('');
+  const navigate = useNavigate()
+
+  const submitLogin = async ()=>{
+    const res = await loginApi({useremail: useremail, password: password})
+    if(res.status == 200){
+      navigate("/home")
+    }
+  }
+
   return(
     <div className="d-flex w-100 h-100">
       <div className="d-flex col-6" style={{backgroundColor: '#fff2db'}}>
@@ -27,62 +33,40 @@ function LoginComponent(){
       </div>
 
       <div className="d-flex col-6" style={{backgroundColor: 'whitesmoke'}}>
-        <Card sx={{ width: '100%', margin: '15%', backgroundColor: 'transparent', boxShadow: 'none'}}>
-          
+        <Card sx={{ width: '100%', margin: '15%', backgroundColor: 'transparent', boxShadow: 'none', zIndex: '21'}}>
+          <Box sx={{padding: "1%"}}>
+            <div className="d-flex justify-content-center">
+              <Typography variant='h2' sx={{fontWeight: '700'}}> PayNow </Typography>
+            </div>
+            <TextField id="lg-useremail"
+              label="Useremail"
+              variant="standard"
+              sx={{display: 'flex', marginTop: '2%'}}
+              style={{fontSize: 22}}
+              value={useremail}
+              onChange={(e)=>{setUseremail(e.target.value)}}
+            />
+            <TextField id="lg-password"
+              label="Password"
+              type="password"
+              variant="standard"
+              value={password}
+              sx={{display: 'flex', marginTop: '2%'}}
+              onChange={(e)=>{setpassword(e.target.value)}}
+            />
+            <Button variant="contained" onClick={submitLogin} sx={{display: 'flex', width: '100%', marginTop: '4%', backgroundColor: '#212529', color: 'white'}}> 
+              Login 
+            </Button>
+            <p style={{marginTop: '6%'}}> Dont have an account? <Button href="/signup"> SignUp </Button></p>
+            <Button variant="outlined" sx={{display: 'flex', width: '100%', marginTop: '4%', backgroundColor: 'white', color: '#212529'}}> 
+              Forgot Password 
+            </Button>
+          </Box>
         </Card>
       </div>
     </div>
     
   );
-}
-
-
-function signUp(){
-  <div className="d-flex w-100 h-100 align-items-center justify-content-center" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-      <div className="d-flex flex-column align-items-center justify-content-center rounded-2" >
-        <div className="card rounded-3 border-0 m-2 align-items-center w-100">
-          {/* <div className="row">
-            <h2>Login</h2>
-          </div>
-          <div className="mt-2 mb-2">
-            <input type="text" name="username" className="form-control " placeholder="Email"></input>
-            <input type="text" name="password" className="form-control mt-1" placeholder="Password"></input>            
-          </div>
-          <div className="mt-2 mb-2">
-            <button className="btn" style={{color: "rgb(255 233 230)", backgroundColor: "#003F80"}}> Login </button>
-          </div> */}
-          <Box
-            component="form"
-            sx={{
-              '& .MuiTextField-root': { m: 1, width: '25ch' },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <h2>Login</h2>
-            <div>
-              <TextField
-                id="outlined-password-input"
-                label="Useremail"
-                type="text"
-                autoComplete="off"
-              />
-            </div>
-            <div>
-              <TextField
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                autoComplete="off"
-              />
-            </div>
-            
-
-          </Box>
-        </div>
-       
-      </div>
-    </div>
 }
 
 export default LoginComponent;

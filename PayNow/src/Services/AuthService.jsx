@@ -11,7 +11,7 @@ const BASE_URL = API_BASE_URL;
 export const loginApi = async (data)=>{
   const loginURL = BASE_URL + "/login";
   const response = await axiosInstance.post(loginURL, data);
-  response.data;
+  return response;
 }
 
 export const signupApi = async (data)=>{

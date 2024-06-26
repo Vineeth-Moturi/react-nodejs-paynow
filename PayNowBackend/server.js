@@ -50,8 +50,10 @@ database.once('open', () => {
 const appRouter = require('./routes/authRoutes');
 app.use('/api', appRouter)
 
+const authenticatedRoutes = require('./routes/authenticatedRoutes');
+app.use('/api/authenticate', isAuthenticated, authenticatedRoutes);
 
-app.get('/api/authenticate', isAuthenticated, (req, res) => {
+app.get('/api/authenticatetest', isAuthenticated, (req, res) => {
   res.send('Hello from the paynow backend');
 });
 

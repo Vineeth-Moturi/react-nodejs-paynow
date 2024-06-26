@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react"
+import {homeApi} from '../../Services/HomeService';
 
 function HomeComponent(){
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState('');
 
   useEffect(() => {
-    setTimeout(()=>{
-      setCount((count)=> count+1);
-    }, 1000)
+    const fetchHomeData = async ()=>{
+      const res = await homeApi({});
+      if(res){
+        console.log('HomeComponent res', res)
+      }
+    }
+    fetchHomeData();
   });
-
-  return(
-    <>
-    <h1>I have rendered {count} times!</h1>;
-    </>
-  )
 }
 export default HomeComponent;
