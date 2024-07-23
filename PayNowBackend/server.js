@@ -32,7 +32,7 @@ function isAuthenticated(req, res, next) {
   if (req.session.user) {
     next();
   } else {
-    res.status(401).send('Invalid session');
+    res.status(401).json({message: 'Invalid session'});
   }
 }
 

@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css';
 import AppRouter from './AppRouter';
+import SnackBarHelper from './Helpers/SnackBarHelper';
 import styled from 'styled-components';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
@@ -14,9 +15,11 @@ import '@fontsource/roboto/700.css';
 
 const  App = () => {
   return (
-    <div className='d-flex h-100 w-100 p-0'>
-      <AppRouter />
-    </div>
+    <SnackBarHelper>
+      <div className='d-flex h-100 w-100 p-0'>
+        <AppRouter />
+      </div>
+    </SnackBarHelper>
   );
 }
 export default App
