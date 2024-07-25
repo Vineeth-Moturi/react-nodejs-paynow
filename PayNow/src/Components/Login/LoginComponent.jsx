@@ -10,6 +10,7 @@ import './LoginStyles.css'
 import loginAbrsract1 from '../../assets/loginAbrsract1.jpg'
 import { loginApi } from '../../Services/AuthService';
 import { useSnackBar } from '../../Helpers/SnackBarHelper';
+import { useUser} from '../../Helpers/UserHelper';
 
 
 
@@ -18,13 +19,19 @@ function LoginComponent(){
   const [password, setpassword] = useState('');
   const navigate = useNavigate();
   const showSnackBar = useSnackBar();
+  const { user, updateUser} = useUser();
 
   const submitLogin = async ()=>{
-    const res = await loginApi({useremail: useremail, password: password})
+    const res = await loginApi({useremail: useremail, password: password});
     if(res.status == 200){
+      if(res.data.userDetails){
+        updateUser({
+          userName: res.data.userDetails.username,
+          userEmail: res.data.userDetails.email
+        })
+      }
       navigate("/home")
     }else{
-      console.log(res)
       showSnackBar({message: "Something Went Wrong", severity: 'warning', transition: 'SlideTransition'})
     }
   }

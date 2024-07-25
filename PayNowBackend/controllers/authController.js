@@ -40,7 +40,9 @@ async function loginHanlder(req, res){
       const pass_match = await bcrypt.compare(password, user.password)
       if(pass_match){
         req.session.user = { useremail: user.useremail}
-        res.status(200).json({status: "success", message: "Login successfull"})
+        res.status(200).json({status: "success", message: "Login successfull", userDetails: {
+          username: user.username, email: user.useremail
+        }})
       }else{
         res.status(401).json({status: "Un-authorised", message: "Login failed"})
       }
