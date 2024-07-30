@@ -1,17 +1,22 @@
 import { useEffect } from 'react';
-import {logoutApi} from '../../Services/AuthService';
 import { useNavigate } from 'react-router-dom';
 
+import { useUser} from '../../Helpers/UserHelper';
+import {logoutApi} from '../../Services/AuthService';
+
 function LogoutComponent(){
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const {user, updateUser} = useUser();
   
-  useEffect(()=>{
-    const callLogout = async ()=>{
-      const res = await logoutApi();
-      if(res.status == 200){
-        navigate('/login')
-      }
+  const callLogout = async ()=>{
+    const res = await logoutApi();
+    if(res.status == 200){
+      updateUser(null)
+      navigate('/login')
     }
+  }
+
+  useEffect(()=>{
     callLogout();
   })
 }

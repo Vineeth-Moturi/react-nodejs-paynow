@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Typography } from "@mui/material";
 
 import './TopNavToolbar.css';
 import AccountMenu from './AccountMenu/AccountMenu'
@@ -9,11 +10,10 @@ function TopNavToolbar(){
     <div className="top-navbar">
       <div className="d-flex">
         <div className="d-flex col-2">
-          nav bar
+          <Typography variant='h6' sx={{fontWeight: '700', color: 'whitesmoke', marginLeft: '7%'}}> PayNow </Typography>
         </div>
 
         <div className="d-flex col-8">
-
         </div>
 
         <div className="d-flex col-2 justify-content-end">

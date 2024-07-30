@@ -10,16 +10,24 @@ async function signupHandler(req, res){
     const user = await User.findOne({useremail});
     if(!user){
       const hashedPassword = await bcrypt.hash(password, 10);
+      const userId = await generateUID()
       const user = new User({
         username: username,
         useremail: useremail,
-        password: hashedPassword
+        password: hashedPassword,
+        userId: userId
       });
   
       try {
         const success = await user.save()
-        req.session.user = { useremail: user.useremail}
-        res.status(201).json({status: 'User successfully created', success: success})
+        if(success){
+          req.session.user = { useremail: user.useremail}
+          res.status(201).json({status: 'User successfully created', userDetails: {
+            username: user.username, email: user.useremail
+          }})
+        }else{
+          res.status(200).json({status: 'Unable to create User, Something went wrong'})
+        }
       }catch(err){
         res.status(401).json({status: "Un-authorised", err: err})
       }
@@ -27,7 +35,7 @@ async function signupHandler(req, res){
       res.status(200).json({status: 'User already existing'})
     }
   }catch(err){
-    res.status(422).json({message: "Something went wrong"})
+    res.status(422).json({message: "Something went wrong", err: err})
   }
 }
 
@@ -63,5 +71,21 @@ async function logoutHandler(req, res){
   });
 }
 
+
+async function generateUID(length=10){
+  const ref = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const refLength = ref.length;
+  let uid =''
+
+  for(let i=0;i<length;i++){
+    uid += ref.charAt(Math.floor(Math.random() * refLength))
+  }
+  const user = await User.findOne({userId: uid});
+  if(user){
+    generateUID();
+  }else{
+    return uid;
+  }
+}
 
 module.exports = { signupHandler, loginHanlder, logoutHandler};

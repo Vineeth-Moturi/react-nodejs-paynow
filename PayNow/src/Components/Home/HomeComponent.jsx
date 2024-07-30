@@ -4,6 +4,8 @@ import {homeApi} from '../../Services/HomeService';
 import './HomeStyles.css';
 import BackgroundTemplate1 from '../GenericLayouts/BackgroundTemplate1/BackgroundTemplate1';
 import TopNavToolbar from '../GenericLayouts/TopNavToolbar/TopNavToolbar';
+import DashboardHeader from './DashboardHeader/DashboardHeader';
+import DashboardBodyContent from './DashboardBodyContent/DashboardBodyContent';
 
 function HomeComponent(){
   const [count, setCount] = useState('');
@@ -36,25 +38,29 @@ function HomeComponent(){
             >
               <div className="d-flex" style={{
                 minHeight: '40px',
-                maxHeight: '40px',
-                }}
+                maxHeight: '40px'}}
                 >
                 <TopNavToolbar />
               </div>
 
               <div className="d-flex" style={{
-                minHeight: 'calc(30% - 40px)',
-                maxHeight: 'calc(30% - 40px)',
-                }}
+                minHeight: 'calc(25% - 40px)',
+                maxHeight: 'calc(25% - 40px)',
+                marginLeft: '3%',
+                marginRight: '3%',
+                width: '94%'}}
                 >
-                test 1
+                <DashboardHeader />
               </div>
 
               <div className="d-flex" style={{
-                minHeight: '70%',
-                maxHeight: '70%',}}
+                minHeight: '75%',
+                maxHeight: '75%',
+                marginLeft: '3%',
+                marginRight: '3%',
+                width: '94%'}}
                 >
-                test2
+                <DashboardBodyContent />
               </div>
           </div>
         

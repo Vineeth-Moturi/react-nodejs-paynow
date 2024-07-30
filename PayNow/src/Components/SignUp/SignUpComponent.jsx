@@ -3,16 +3,22 @@ import { useNavigate } from 'react-router-dom'
 import loginBg from '../../assets/loginBgPaynow.jpg';
 import { useState } from "react";
 import {signupApi}  from '../../Services/AuthService';
+import { useUser} from '../../Helpers/UserHelper';
 
 function SignUpComponent(){
   const [username, setUsername] = useState("");
   const [useremail, setUseremail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { user, updateUser} = useUser();
 
   const submitSignUpDetails = async () => {
     const res = await signupApi({username: username, useremail: useremail, password: password})
-    if(res.status == 201){
+    if(res.status == 201 && res.data.userDetails){
+      updateUser({
+        userName: res.data.userDetails.username,
+        userEmail: res.data.userDetails.email
+      })
       navigate("/home")
     }
   }

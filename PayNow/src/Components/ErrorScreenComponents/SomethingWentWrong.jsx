@@ -11,8 +11,14 @@ function SomethingWentWrong(){
   console.error("ErrorCatcher: ",uiError);
   return(
     <Container maxWidth="sm-12">
-      <Box  sx={{ bgcolor: '#cfe8fc', height: '50vh' }}>
+      {/* <Box  sx={{ bgcolor: '#cfe8fc', height: '50vh' }}>
         <p style={{color: '#1b405f', fontSize: 60, position: 'absolute', right: '18%', top: '13%'}}>
+          Sorry..
+        </p>
+        <img src={brokenShip} style={{height: "125%"}} />
+      </Box> */}
+      <Box  sx={{ bgcolor: '#cfe8fc', height: '50vh' }}>
+        <p style={{color: 'rgb(236 246 255)', fontSize: 60, position: 'absolute', right: '18%', top: '13%'}}>
           Sorry..
         </p>
         <img src={brokenShip} style={{height: "125%"}} />

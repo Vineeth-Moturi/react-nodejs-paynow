@@ -8,17 +8,17 @@ function BackgroundTemplate1(){
       zIndex: '0'}}
       >
       <div className="d-flex" style={{
-          minHeight: '30%',
-          maxHeight: '30%',
+          minHeight: '35%',
+          maxHeight: '35%',
           backgroundColor: '#212529', 
         }}
         >
       </div>
 
       <div className="d-flex" style={{
-          minHeight: '70%',
-          maxHeight: '70%',
-          backgroundColor: 'whitesmoke'
+          minHeight: '65%',
+          maxHeight: '65%',
+          backgroundColor: '#e8e8e8'
         }}>
       </div>
     </div>
