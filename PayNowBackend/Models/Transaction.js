@@ -24,6 +24,10 @@ const transactionSchema = new mongoose.Schema({
   transaction_date: {
     type: Date,
     required: true
+  },
+  transaction_type: {
+    type: String,
+    required: true
   }
 })
 module.exports = mongoose.model('Transaction', transactionSchema)

@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import {useUser} from '../../../Helpers/UserHelper';
+import QuickSendPannel from '../../QuickSendPannel/QuickSend';
 
 
 
@@ -13,7 +14,7 @@ function DashboardHeader(){
       </div>
 
       <div className="col-4">
-        
+        <QuickSendPannel />
       </div>
 
       <div className="col-4">
