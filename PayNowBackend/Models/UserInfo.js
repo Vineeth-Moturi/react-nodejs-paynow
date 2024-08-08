@@ -11,6 +11,10 @@ const UserInfoSchema = new mongoose.Schema({
   lastname: {
     type: String
   },
+  useremail: {
+    type: String,
+    required: true,
+  },
   phone: {
     type: String
   },

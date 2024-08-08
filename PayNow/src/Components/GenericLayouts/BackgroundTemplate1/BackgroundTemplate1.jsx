@@ -10,6 +10,7 @@ function BackgroundTemplate1(){
       <div className="d-flex" style={{
           minHeight: '35%',
           maxHeight: '35%',
+          // backgroundColor: '#182D38'
           backgroundColor: '#212529', 
         }}
         >

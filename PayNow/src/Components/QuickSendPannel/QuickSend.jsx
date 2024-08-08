@@ -4,12 +4,13 @@ import { Box, Paper, Typography, TextField } from "@mui/material";
 
 import quickSendBg from '../../assets/paynow.jpg'
 import { searchUser } from "../../Services/QuickSendService";
+import RecieverListComponent from './RecieverListComponent/RecieverListComponent';
 
 function QuickSendPannel(){
   const [openQuickPannel, setOpenQuickPannel] = useState(false);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(query);
-  const [contactList, setContactList] = useState([]);
+  const [recieverList, setRecieverList] = useState([]);
 
   const toggleQuickPannel = (newState) => () =>{
     setOpenQuickPannel(newState)
@@ -21,10 +22,13 @@ function QuickSendPannel(){
       const getRecieverDetails = async ()=>{
         let res = await searchUser({queryString: debouncedQuery});
         console.log('result', res)
+        if(res){
+          setRecieverList(res.data.userDetails)
+        }
       }
       getRecieverDetails()
     }else{
-      setContactList([])
+      setRecieverList([])
     }
   }, [debouncedQuery])
 
@@ -87,7 +91,7 @@ function QuickSendPannel(){
                 </div>
 
                 <div style={{height: '80%'}}>
-                  test 3
+                  <RecieverListComponent data={recieverList} />
                 </div>
               </div>
             </Card>
