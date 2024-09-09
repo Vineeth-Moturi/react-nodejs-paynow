@@ -65,5 +65,6 @@ app.get('/api/servercheck', (req, res) => {
 // Start the server
 app.listen(PORT, () => {
   console.log('Initializing Server..')
+  console.log(`Taking Environment as ${process.env.NODE_ENV}`)
   console.log(`Server is running on http://localhost:${PORT}`);
 });
