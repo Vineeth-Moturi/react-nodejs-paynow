@@ -59,7 +59,7 @@ app.get('/api/authenticatetest', isAuthenticated, (req, res) => {
 
 app.get('/api/servercheck', (req, res) => {
   console.log('Server check endpoint hit'); // Add this for debugging
-  res.status(200).json({ status: 'Backed Server is hitting' });
+  res.status(200).json({ status: 'Backed Server is hitting:'+ process.env.NODE_ENV, authConfig: authConfig });
 });
 
 // Start the server
