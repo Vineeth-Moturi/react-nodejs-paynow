@@ -57,6 +57,9 @@ app.get('/api/authenticatetest', isAuthenticated, (req, res) => {
   res.send('Hello from the paynow backend');
 });
 
+app.get('/api/servercheck', (req, res) => {
+  res.send('Hello from the paynow server');
+});
 
 // Start the server
 app.listen(PORT, () => {
