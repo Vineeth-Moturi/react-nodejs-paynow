@@ -58,7 +58,8 @@ app.get('/api/authenticatetest', isAuthenticated, (req, res) => {
 });
 
 app.get('/api/servercheck', (req, res) => {
-  res.send('Hello from the paynow server');
+  console.log('Server check endpoint hit'); // Add this for debugging
+  res.status(200).json({ status: 'Backed Server is hitting' });
 });
 
 // Start the server
