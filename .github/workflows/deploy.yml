@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Loading SSH key setup
+      uses: webfactory/ssh-agent@v0.5.3
+      with: 
+        ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+    
     - name: Deploy via SSH
       uses: appleboy/ssh-action@v0.1.2
       with: 
@@ -18,6 +23,7 @@ jobs:
         key: ${{secrets.EC2_SSH_PRIVATE_KEY}}
         port: 22
         script: |
+          ssh -v ${{ secrets.EC2_SSH_USERNAME }}@${{ secrets.EC2_SERVER_IP }} "echo 'SSH Connection Successful'"
           cd /var/www/paynow/react-nodejs-paynow/PayNow/
           sudo rm -rf dist
           cd /var/www/paynow/react-nodejs-paynow/
