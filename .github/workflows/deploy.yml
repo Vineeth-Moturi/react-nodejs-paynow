@@ -1,0 +1,27 @@
+name: Deploy to Nginx
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.2
+      with: 
+        host: ${{secrets.EC2_SERVER_IP}}
+        username: ${{secrets.EC2_SSH_USERNAME}}
+        key: ${{secrets.EC2_SSH_PRIVATE_KEY}}
+        port: 22
+        script: |
+          cd /var/www/paynow/react-nodejs-paynow/PayNow/
+          sudo rm -rf dist
+          cd /var/www/paynow/react-nodejs-paynow/
+          sudo git pull origin master
+          cd /var/www/paynow/react-nodejs-paynow/PayNow/
+          sudo npm install
+          sudo npm run build
+          sudo systemctl restart nginx

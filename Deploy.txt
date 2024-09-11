@@ -1,0 +1,52 @@
+name: Deploy to Nginx
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Project Code
+      uses: actions/checkout@v2
+
+
+    - name: Setup NodeJs
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    # Below will install dependencies from package-lock.json
+    - name: Install Dependencies
+      run: |
+        cd PayNow
+        npm ci
+    
+    - name: Build Project
+      run: 
+        cd PayNow
+        npm run build
+
+    - name: Loading SSH key setup
+      uses: webfactory/ssh-agent@v0.5.3
+      with: 
+        ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+    - name: Copying Build files to Server
+      run: |
+        scp -r PayNow/dist/*  ${{ secrets.EC2_SSH_USERNAME }}@${{ secrets.EC2_SERVER_IP }}:/var/www/paynow/temp-dist/
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.2
+      with: 
+        host: ${{secrets.EC2_SERVER_IP}}
+        username: ${{secrets.EC2_SSH_USERNAME}}
+        key: ${{secrets.EC2_SSH_PRIVATE_KEY}}
+        port: 22
+        script: |
+          cd /var/www/paynow/react-nodejs-paynow/
+          rm -rf *
+          sudo systemctl restart nginx

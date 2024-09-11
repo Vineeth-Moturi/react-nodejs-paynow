@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# This is environment setup file
+# Running the Script
+# 1. Convert this .txt file to .sh file
+# 2. chmod +x EnvSetup.sh
+# 3. ./EnvSetup.sh
+
+sudo apt install nginx
+sudo apt-get install -y dirmngr gnupg
+sudo apt-get install -y dirmngr gnupg apt-transport-https ca-certificates curl
+
+curl https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/phusion.gpg >/dev/null
+
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger noble main > /etc/apt/sources.list.d/passenger.list'
+
+sudo apt-get update
+sudo apt-get install -y passenger
+sudo systemctl stop apparmor
+sudo systemctl disable apparmor
+sudo apt-get install -y nginx-extras libnginx-mod-http-passenger
+if [ ! -f /etc/nginx/modules-enabled/50-mod-http-passenger.conf ]; then sudo ln -s /usr/share/nginx/modules-available/mod-http-passenger.load /etc/nginx/modules-enabled/50-mod-http-passenger.conf ; fi
+
+sudo apt-get install gnupg curl
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc |    sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg    --dearmor
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+sudo systemctl start mongod
+sudo systemctl enable mongod
+
+
+
+sudo apt install nodejs
+sudo apt install npm
+sudo /usr/sbin/passenger-memory-stats
