@@ -11,12 +11,12 @@ jobs:
 
     steps:
     - name: Loading SSH key setup
-      uses: webfactory/ssh-agent@vmaster
+      uses: webfactory/ssh-agent@v0.9.0
       with: 
         ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
     
     - name: Deploy via SSH
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v1.0.3
       with: 
         host: ${{secrets.EC2_SERVER_IP}}
         username: ${{secrets.EC2_SSH_USERNAME}}
