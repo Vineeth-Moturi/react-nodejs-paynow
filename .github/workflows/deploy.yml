@@ -31,4 +31,6 @@ jobs:
           cd /var/www/paynow/react-nodejs-paynow/PayNow/
           sudo npm install
           sudo npm run build
+          cd /var/www/paynow/react-nodejs-paynow/PayNowBackend/
+          sudo npm install
           sudo systemctl restart nginx
