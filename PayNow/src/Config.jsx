@@ -1,2 +1,2 @@
 // export const API_BASE_URL = "http://localhost:5000/api"
-export const API_BASE_URL = "http://52.66.180.49/api"
+export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL + "/api";

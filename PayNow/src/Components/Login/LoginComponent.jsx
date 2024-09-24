@@ -48,7 +48,7 @@ function LoginComponent(){
         <Card sx={{ width: '100%', margin: '15%', backgroundColor: 'transparent', boxShadow: 'none', zIndex: '21'}}>
           <Box sx={{padding: "1%"}}>
             <div className="d-flex justify-content-center">
-              <Typography variant='h2' sx={{fontWeight: '700'}}> YesPayNow </Typography>
+              <Typography variant='h2' sx={{fontWeight: '700'}}> PayNow </Typography>
             </div>
             <TextField id="lg-useremail"
               label="Useremail"
