@@ -48,7 +48,8 @@ function SignUpComponent(){
 
   const components = useMemo(() => [
     <UserDetails fields={UserDetailsFields} />, 
-    <Credentials fields={CredentialsFields} />
+    <Credentials fields={CredentialsFields} />,
+    <ProfileImage />
   ]);
   // <ProfileImage fields={ProfileImageFields} />
   const submitSignUpDetails = async () => {
