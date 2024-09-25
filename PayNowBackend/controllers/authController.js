@@ -2,10 +2,11 @@ const User = require('../Models/User')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const authConfig = require('../Config/AuthConfig');
+const UserInfo = require('../Models/UserInfo');
 
 
 async function signupHandler(req, res){
-  const {username, useremail, password} = req.body;
+  const {username, useremail, password, firstname, lastname, phone, country} = req.body;
   try{
     const user = await User.findOne({useremail});
     if(!user){
@@ -21,6 +22,15 @@ async function signupHandler(req, res){
       try {
         const success = await user.save()
         if(success){
+          const userinfo = new UserInfo({
+            userId: user.id,
+            useremail: useremail,
+            firstname: firstname,
+            lastname: lastname,
+            phone: phone,
+            country: country
+          });
+          const success2 = await userinfo.save()
           req.session.user = { useremail: user.useremail}
           res.status(201).json({status: 'User successfully created', userDetails: {
             username: user.username, email: user.useremail
