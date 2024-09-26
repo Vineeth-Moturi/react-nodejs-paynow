@@ -7,6 +7,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from '@mui/material/styles';
 
 import { uploadFileApi, fetchFileApi } from '../../../Services/FileHandlerService';
+import { useSnackBar } from '../../../Helpers/SnackBarHelper';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -20,9 +21,10 @@ const VisuallyHiddenInput = styled('input')({
   width: 1
 });
 
-const ProfileImage = React.memo( ({fields}) => {
+const ProfileImage = React.memo( ({userDetails}) => {
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const showSnackBar = useSnackBar();
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -35,9 +37,10 @@ const ProfileImage = React.memo( ({fields}) => {
     const formData = new FormData();
     formData.append('image', file);
     try{
-      const res = await uploadFileApi({formData});
+      const res = await uploadFileApi(formData, userDetails.userEmail);
       if(res){
-        console.log('Image uploaded successfully:', res);
+        showSnackBar({message: res.data.message, severity: 'warning', transition: 'SlideTransition'})
+        navigate("/home")
       }
     } catch(error) {
       console.error('Error uploading the image:', error);
@@ -45,22 +48,25 @@ const ProfileImage = React.memo( ({fields}) => {
   }
 
   return(
-    <Box className="d-flex" sx={{padding: "1%", alignContent: "center", width: '100%'}}>
+    <div className='d-flex row align-items-center justify-content-center'>
+      {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '200px', marginTop: '20px' }} />}
+      <Box className="d-flex justify-content-center" sx={{padding: "1%", width: '100%'}}>
       <Button
-        component="label"
-        role={undefined}
-        variant="contained"
-        tabIndex={-1}
-        startIcon={<CloudUploadIcon />}
-        >
-        Upload file
-        <input type='file' hidden onChange={handleFileChange} accept="image/*" />
-      </Button>
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+          >
+          Choose file
+          <input type='file' hidden onChange={handleFileChange} accept="image/*" />
+        </Button>
 
-      <Button variant="contained" onClick={handleFileUpload}>
-        Submit File
-      </Button>
-    </Box>
+        <Button variant="contained" onClick={handleFileUpload}>
+          Upload
+        </Button>
+      </Box>
+    </div>
   )
 });
 export default ProfileImage;

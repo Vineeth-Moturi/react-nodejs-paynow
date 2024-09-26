@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 
-export default function LinearStepperHelper({steps, submitHandler, components}){
+export default function LinearStepperHelper({steps, submitHandler, components, submitProfilePic, user}){
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
 
@@ -89,6 +89,9 @@ export default function LinearStepperHelper({steps, submitHandler, components}){
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
           {components[activeStep]}
+
+          {/* Below one hanldes stepper footer buttons */}
+          {/* Need to make footer as generic component */}
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
@@ -104,13 +107,17 @@ export default function LinearStepperHelper({steps, submitHandler, components}){
                 Skip
               </Button>
             )}
-            <Button onClick={handleNext} hidden={(activeStep === steps.length - 1)}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            <Button onClick={handleNext} hidden={!(activeStep === 0 || user)}>
+              Next
             </Button>
 
-            <Button onClick={submitHandler} hidden={!(activeStep === steps.length - 1)}>
-              SignUp
+            <Button onClick={submitHandler} hidden={!(activeStep === 1) || user}>
+              Submit
             </Button>
+
+            {/* <Button onClick={handleNext} hidden={(activeStep === steps.length - 1)}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button> */}
           </Box>
         </React.Fragment>
       )}

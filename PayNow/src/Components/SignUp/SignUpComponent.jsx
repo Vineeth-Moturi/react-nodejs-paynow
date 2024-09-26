@@ -13,6 +13,7 @@ import LinearStepperHelper from '../../Helpers/LinearStepperHelper';
 import UserDetails from './StepFunctions/UserDetails';
 import Credentials from './StepFunctions/Credentials';
 import ProfileImage from './StepFunctions/ProfileImage';
+import { useSnackBar } from '../../Helpers/SnackBarHelper';
 
 function SignUpComponent(){
   const [username, setUsername] = useState("");
@@ -28,6 +29,7 @@ function SignUpComponent(){
   const navigate = useNavigate();
   const { user, updateUser} = useUser();
   const steps = ['User Details', 'Credentials', 'Profile Image'];
+  const showSnackBar = useSnackBar();
 
   const UserDetailsFields = useMemo(() => [
     {label: "FirstName", value: firstname, updateHandler: setFirstname, validationRegex: '', type: 'text'},
@@ -49,7 +51,7 @@ function SignUpComponent(){
   const components = useMemo(() => [
     <UserDetails fields={UserDetailsFields} />, 
     <Credentials fields={CredentialsFields} />,
-    <ProfileImage />
+    <ProfileImage userDetails={user} />
   ]);
   // <ProfileImage fields={ProfileImageFields} />
   const submitSignUpDetails = async () => {
@@ -67,7 +69,9 @@ function SignUpComponent(){
         userName: res.data.userDetails.username,
         userEmail: res.data.userDetails.email
       })
-      navigate("/home")
+      showSnackBar({message: res.data.message, severity: 'warning', transition: 'SlideTransition'})
+    }else{
+      showSnackBar({message: res.data.message,variant: 'standard', transition: 'SlideTransition'})
     }
   }
 
@@ -105,7 +109,7 @@ function SignUpComponent(){
             <div className="d-flex justify-content-center pb-3">
               <Typography variant='h4' sx={{fontWeight: '700'}}> SignUp </Typography>
             </div>
-            <LinearStepperHelper steps={steps} submitHandler={submitSignUpDetails} components={components} />
+            <LinearStepperHelper steps={steps} submitHandler={submitSignUpDetails} components={components} user={user} />
           </Box>
         </Card>
       </div>

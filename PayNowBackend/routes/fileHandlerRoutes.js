@@ -6,7 +6,8 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage })
 
-const { FileUploadHandler } = require('../controllers/fileUploadController');
+const { FileUploadHandler, FileRetriveHandler } = require('../controllers/fileHandlerController');
 
 router.post('/upload', upload.single('image'), FileUploadHandler);
+router.get('/fetch', FileRetriveHandler)
 module.exports = router;

@@ -5,10 +5,13 @@ import axiosInstance from '../Helpers/AxiosApiHelper';
 const BASE_URL = API_BASE_URL;
 
 
-export const uploadFileApi = async (data)=>{
+export const uploadFileApi = async (data, userEmail)=>{
   const uploadURL = BASE_URL + "/file/upload";
   const response = await axiosInstance.post(uploadURL, data, {
-    headers: {'Content-Type': 'multipart/form-data'}
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'user-email': userEmail
+    }
   });
   return response;
 }

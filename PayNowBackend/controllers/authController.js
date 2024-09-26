@@ -32,17 +32,17 @@ async function signupHandler(req, res){
           });
           const success2 = await userinfo.save()
           req.session.user = { useremail: user.useremail}
-          res.status(201).json({status: 'User successfully created', userDetails: {
+          res.status(201).json({message: 'User successfully created', userDetails: {
             username: user.username, email: user.useremail
           }})
         }else{
-          res.status(200).json({status: 'Unable to create User, Something went wrong'})
+          res.status(200).json({message: 'Unable to create User, Something went wrong'})
         }
       }catch(err){
-        res.status(401).json({status: "Un-authorised", err: err})
+        res.status(401).json({message: "Un-authorised", err: err})
       }
     }else{
-      res.status(200).json({status: 'User already existing'})
+      res.status(200).json({message: 'User already existing'})
     }
   }catch(err){
     res.status(422).json({message: "Something went wrong", err: err})
