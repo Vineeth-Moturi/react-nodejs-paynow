@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ObjectId } = require("mongodb");
 
 const userShema = new mongoose.Schema({
   username: {
@@ -13,10 +14,14 @@ const userShema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  userId: {
+  userUid: {
     type: String,
     required: true
   },
+  userInfo: {
+    type: ObjectId,
+    ref: 'UserInfo'
+  }
 })
 
 module.exports = mongoose.model('User', userShema);

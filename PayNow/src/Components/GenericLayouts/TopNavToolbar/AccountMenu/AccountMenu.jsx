@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { useUser } from "../../../../Helpers/UserHelper";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL} from '../../../../Services/FileHandlerService'
 
 function AccountMenu(){
   const {user, updateUser} = useUser();
@@ -23,6 +24,14 @@ function AccountMenu(){
     navigate(route)
   }
 
+  const usrPrep = (user) => {
+    if(user?.userProfilePicUrl){
+      return BASE_URL + '/' + user?.userProfilePicUrl;
+    }else{
+      return undefined
+    }
+  }
+  
 
   return(
     <>
@@ -32,7 +41,9 @@ function AccountMenu(){
         aria-haspopup= 'true'
         aria-expanded= { isOpen ? true : undefined }
         >
-        <Avatar sx={{height: 28, width: 28}}
+        <Avatar 
+          sx={{height: 28, width: 28}}
+          src={usrPrep(user)}
           >
           {(user && user.userName) ? user.userName[0] : "D"} 
         </Avatar>

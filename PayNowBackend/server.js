@@ -37,13 +37,38 @@ function isAuthenticated(req, res, next) {
 }
 
 
+// Config for Images handling
+const multer = require('multer');
+const { GridFSBucket } = require('mongodb');
+const Grid = require('gridfs-stream');
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+var gfs;
+var gridFSBucket;
+
+// Multer storage setup - it uses memory storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage })
+
 // Connect to mongodb
 mongoose.connect(authConfig.MONGODB_URL);
-
-const database = mongoose.connection;
-database.on('error', console.error.bind(console, 'connection error:'));
-database.once('open', () => {
-  console.log("Database connection: successfull")
+const database_conn = mongoose.connection;
+database_conn.on('error', console.error.bind(console, 'Database connection: failed'));
+database_conn.once('open', () => {
+  console.log("Database connection: successfull");
+  gfs = Grid(database_conn.db, mongoose.mongo);
+  gfs.collection('fileuploads');    // Collection name
+  gridFSBucket = new GridFSBucket(database_conn.db, {
+    bucketName: 'fileuploads'
+  })
+  // Config for Images handling
+  const fileHandlerRoutes = require('./routes/fileHandlerRoutes');
+  const attachGridFS = (gfs, gridFSBucket) => (req, res, next) => {
+    req.gfs = gfs;
+    req.gridFSBucket = gridFSBucket;
+    next();
+  };
+  app.use('/api/file', attachGridFS(gfs,gridFSBucket), fileHandlerRoutes);
 })
 
 // Routes

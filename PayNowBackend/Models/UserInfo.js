@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
 
 const UserInfoSchema = new mongoose.Schema({
-  userId: {
+  userUid: {
     type: String,
     required: true
   },
@@ -21,5 +22,16 @@ const UserInfoSchema = new mongoose.Schema({
   country: {
     type: String
   },
+  profile_image_id: {
+    type: String
+  },
+  profile_image: {
+    type: String,
+    default: ''
+  },
+  profile_image_url: {
+    type: String,
+    default: ''
+  }
 });
 module.exports = mongoose.model('UserInfo', UserInfoSchema);

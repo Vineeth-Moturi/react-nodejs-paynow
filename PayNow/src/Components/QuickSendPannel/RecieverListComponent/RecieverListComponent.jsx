@@ -2,7 +2,6 @@ import React from 'react';
 import {Card, CardContent, Typography} from '@mui/material'
 
 const RecieverListComponent = React.memo(( {data} ) => {
-  console.log("Reachech RecieverListComponent",data)
   return(
     <div style={{width: '100%', height: '100%'}}>
       {data.map((obj, index)=>(

@@ -10,3 +10,11 @@
   - storeing and retriving the icons and images
 
 #-- Transaction popup
+
+
+
+
+### Planed Issues
+1. Adding profile images to users
+2. Add step functions on signup - Done
+3. Snackbar on signup - Done

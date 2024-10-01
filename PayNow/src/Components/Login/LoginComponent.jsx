@@ -26,8 +26,10 @@ function LoginComponent(){
     if(res.status == 200){
       if(res.data.userDetails){
         updateUser({
-          userName: res.data.userDetails.username,
-          userEmail: res.data.userDetails.email
+          userName: res?.data?.userDetails?.username,
+          userEmail: res?.data?.userDetails?.useremail,
+          userProfilePic: res?.data?.userDetails?.userInfo?.profile_image,
+          userProfilePicUrl: res?.data?.userDetails?.userInfo?.profile_image_url,
         })
       }
       navigate("/home")
@@ -48,7 +50,7 @@ function LoginComponent(){
         <Card sx={{ width: '100%', margin: '15%', backgroundColor: 'transparent', boxShadow: 'none', zIndex: '21'}}>
           <Box sx={{padding: "1%"}}>
             <div className="d-flex justify-content-center">
-              <Typography variant='h2' sx={{fontWeight: '700'}}> YesPayNow </Typography>
+              <Typography variant='h2' sx={{fontWeight: '700'}}> PayNow </Typography>
             </div>
             <TextField id="lg-useremail"
               label="Useremail"
