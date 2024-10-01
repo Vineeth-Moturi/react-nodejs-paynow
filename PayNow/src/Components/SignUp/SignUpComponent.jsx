@@ -66,36 +66,18 @@ function SignUpComponent(){
     })
     if(res.status == 201 && res.data.userDetails){
       updateUser({
-        userName: res.data.userDetails.username,
-        userEmail: res.data.userDetails.email
+        userName: res?.data?.userDetails?.username,
+        userEmail: res?.data?.userDetails?.useremail,
+        userProfilePic: res?.data?.userDetails?.userInfo?.profile_image,
+        userProfilePicUrl: res?.data?.userDetails?.userInfo?.profile_image_url,
       })
-      showSnackBar({message: res.data.message, severity: 'warning', transition: 'SlideTransition'})
+      showSnackBar({message: res?.data?.message, severity: 'warning', transition: 'SlideTransition'})
     }else{
-      showSnackBar({message: res.data.message,variant: 'standard', transition: 'SlideTransition'})
+      showSnackBar({message: res?.data?.message,variant: 'standard', transition: 'SlideTransition'})
     }
   }
 
   return (
-    // <div className="d-flex w-100 h-100 align-items-center justify-content-center zoom-animation" style={{backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-    //   <div className="d-flex flex-column align-items-center justify-content-center rounded-2" >
-    //     <div className="card rounded-3 border-0 m-2 align-items-center w-100">
-    //       <div className="row">
-    //         <h2>SignUp</h2>
-    //       </div>
-    //       <div className="mt-2 mb-2">
-    //         <input type="text" name="username" value={username} onChange={ (e)=> { setUsername(e.target.value)}} className="form-control mb-1" placeholder="Username"></input>
-    //         <input type="text" name="useremail" value={useremail} onChange={ (e)=> { setUseremail(e.target.value)}} className="form-control " placeholder="Email"></input>
-    //         <input type="password" name="password" value={password} onChange={ (e)=> { setPassword(e.target.value)}} className="form-control mt-1" placeholder="Password"></input>            
-    //       </div>
-    //       <div className="mt-2 mb-2">
-    //         <button className="btn" onClick={submitSignUpDetails} style={{color: "rgb(255 233 230)", backgroundColor: "#003F80"}}>
-    //           SignUp
-    //         </button>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className="d-flex w-100 h-100" style={{backgroundColor: 'rgb(183 201 196)'}}>
       <div className="d-flex col-6" style={{backgroundColor: 'rgb(183 201 196)'}}>
         <Card sx={{ width: '100%', margin: '4%'}}>

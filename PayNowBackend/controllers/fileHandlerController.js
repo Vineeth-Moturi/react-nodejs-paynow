@@ -1,9 +1,8 @@
 // const FileUploader = require('../Helpers/FileUploadHelper');
 const { Readable } = require('stream');
-const User = require("../Models/UserInfo")
+const UserInfo = require("../Models/UserInfo");
 
 async function FileUploadHandler(req, res){
-  console.log("Reached FileUploadHandler")
   // req has gfs, gridFSBucket
   const date_now = new Date().toISOString();
   const { buffer, originalname } = req.file;
@@ -18,17 +17,21 @@ async function FileUploadHandler(req, res){
 
   readableStream.pipe(uploadStream)
     .on('error', (err) => {
-      console.error('Error uploading to GridFS:', err);
       return res.status(500).json({ message: 'Error uploading file' });
     })
     .on('finish', async () => {
       if(useremail){
-        debugger
-        const user = await User.findOne({useremail});
-        if(user){
-          user.profile_image = file_name;
-          await user.save()
-          res.status(200).json({ message: 'Image uploaded successfully' });
+        const user_info = await UserInfo.findOne({useremail});
+        if(user_info){
+          user_info.profile_image = file_name;
+          user_info.profile_image_url = 'file/fetch?file_name='+ file_name;
+          if(await user_info.save()){
+            const userDetails = user_info.toObject();
+            delete userDetails._id
+            res.status(200).json({ message: 'Image uploaded successfully' , userDetails: userDetails});
+          }else{
+            res.status(400).json({ message: 'Image upload Failed' });
+          }
         }else{
           req.params.file_name = file_name
           FileDeletionHandler(req, res);
@@ -40,24 +43,27 @@ async function FileUploadHandler(req, res){
 
 async function FileRetriveHandler(req, res){
   const { file_name } = req.query
-  console.log("Reached retriver")
+  if(file_name){
+    try{
+      const file = await req.gfs.files.findOne({filename: file_name});
+      if(file){
+        res.set('Content-Type', file?.filename?.split('.')[2] || 'application/octet-stream');
+        res.set('Content-Disposition', 'inline');  // This prevents the file from being downloaded automatically
+        
+        const readStream = req.gridFSBucket.openDownloadStream(file._id);
+        readStream.pipe(res);
 
-  try{
-    const file = await req.gfs.files.findOne({file_name}, (err, file) => {
-      if (!file || file.length === 0){
-        res.status(404).json({message: "File not found"})
+        readStream.on('error', (err) => {
+          res.status(404).json({message: "Something went wrong, on retriving file"})
+        });
+      }else{
+        res.status(404).json({message: "File not Found"});
       }
-      if(err){
-        res.status(400).json({message: "Something went wrong", err})
-      }
-      const readStream = req.gridFSBucket.openDownloadStream(file._id);
-      readStream.on('error', (err) => {
-        return res.status(500).json({ message: 'Error retrieving file', err});
-      });
-      readStream.pipe(res);
-    })
-  } catch (err){
-    return res.status(500).json({ message: 'Error retrieving file', err});
+    } catch (err){
+      return res.status(500).json({ message: 'Error retrieving file', err});
+    }
+  }else{
+    res.status(400).json({message: "File name not provided"});
   }
 }
 

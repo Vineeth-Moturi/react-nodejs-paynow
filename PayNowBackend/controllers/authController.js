@@ -11,30 +11,38 @@ async function signupHandler(req, res){
     const user = await User.findOne({useremail});
     if(!user){
       const hashedPassword = await bcrypt.hash(password, 10);
-      const userId = await generateUID()
+      const userUid = await generateUID()
       const user = new User({
         username: username,
         useremail: useremail,
         password: hashedPassword,
-        userId: userId
+        userUid: userUid
       });
   
       try {
         const success = await user.save()
         if(success){
           const userinfo = new UserInfo({
-            userId: user.id,
+            userUid: userUid,
             useremail: useremail,
             firstname: firstname,
             lastname: lastname,
             phone: phone,
             country: country
           });
-          const success2 = await userinfo.save()
-          req.session.user = { useremail: user.useremail}
-          res.status(201).json({message: 'User successfully created', userDetails: {
-            username: user.username, email: user.useremail
-          }})
+          await userinfo.save();
+          user.userInfo = userinfo._id;
+          await user.save();
+          const userDetails = await User.findOne({useremail})
+            .select('-_id -password')
+            .populate({path: 'userInfo', select: '-_id'})
+            .exec();
+          if(userDetails){
+            req.session.user = { useremail: user.useremail}
+            res.status(201).json({message: 'User successfully created', userDetails: userDetails})
+          }else{
+            res.status(200).json({message: 'Unable to create User, Something went wrong'})
+          }
         }else{
           res.status(200).json({message: 'Unable to create User, Something went wrong'})
         }
@@ -53,14 +61,15 @@ async function signupHandler(req, res){
 async function loginHanlder(req, res){
   const {useremail, password} = req.body;
   try {
-    const user = await User.findOne({useremail});
+    const user = await User.findOne({useremail}).populate( {path: 'userInfo', select: '-_id'} ).exec();
     if (user){
       const pass_match = await bcrypt.compare(password, user.password)
       if(pass_match){
         req.session.user = { useremail: user.useremail}
-        res.status(200).json({status: "success", message: "Login successfull", userDetails: {
-          username: user.username, email: user.useremail
-        }})
+        const userDetails = user.toObject()
+        delete userDetails._id;
+        delete userDetails.password;
+        res.status(200).json({status: "success", message: "Login successfull", userDetails: userDetails})
       }else{
         res.status(401).json({status: "Un-authorised", message: "Login failed"})
       }
@@ -90,7 +99,7 @@ async function generateUID(length=10){
   for(let i=0;i<length;i++){
     uid += ref.charAt(Math.floor(Math.random() * refLength))
   }
-  const user = await User.findOne({userId: uid});
+  const user = await User.findOne({userUid: uid});
   if(user){
     generateUID();
   }else{

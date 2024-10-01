@@ -107,11 +107,11 @@ export default function LinearStepperHelper({steps, submitHandler, components, s
                 Skip
               </Button>
             )}
-            <Button onClick={handleNext} hidden={!(activeStep === 0 || user)}>
+            <Button onClick={handleNext} hidden={!(activeStep === 0 || user?.userEmail?.length !=0 )}>
               Next
             </Button>
 
-            <Button onClick={submitHandler} hidden={!(activeStep === 1) || user}>
+            <Button onClick={submitHandler} hidden={!(activeStep === 1) || user?.userEmail?.length !=0}>
               Submit
             </Button>
 

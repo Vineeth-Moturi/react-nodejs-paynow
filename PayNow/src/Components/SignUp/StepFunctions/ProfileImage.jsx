@@ -1,13 +1,14 @@
 import React from 'react';
 import { useState } from "react";
 import Box from '@mui/material/Box';
-import TextField from "@mui/material/TextField";
 import { Button } from '@mui/material';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 import { uploadFileApi, fetchFileApi } from '../../../Services/FileHandlerService';
 import { useSnackBar } from '../../../Helpers/SnackBarHelper';
+import { useUser} from '../../../Helpers/UserHelper';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -25,6 +26,8 @@ const ProfileImage = React.memo( ({userDetails}) => {
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const showSnackBar = useSnackBar();
+  const navigate = useNavigate();
+  const { user, updateUser} = useUser();
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -40,6 +43,10 @@ const ProfileImage = React.memo( ({userDetails}) => {
       const res = await uploadFileApi(formData, userDetails.userEmail);
       if(res){
         showSnackBar({message: res.data.message, severity: 'warning', transition: 'SlideTransition'})
+        updateUser({
+          userProfilePic: res?.data?.userDetails?.profile_image,
+          userProfilePicUrl: res?.data?.userDetails?.profile_image_url,
+        })
         navigate("/home")
       }
     } catch(error) {

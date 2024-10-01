@@ -26,8 +26,10 @@ function LoginComponent(){
     if(res.status == 200){
       if(res.data.userDetails){
         updateUser({
-          userName: res.data.userDetails.username,
-          userEmail: res.data.userDetails.email
+          userName: res?.data?.userDetails?.username,
+          userEmail: res?.data?.userDetails?.useremail,
+          userProfilePic: res?.data?.userDetails?.userInfo?.profile_image,
+          userProfilePicUrl: res?.data?.userDetails?.userInfo?.profile_image_url,
         })
       }
       navigate("/home")
