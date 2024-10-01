@@ -11,6 +11,7 @@ function QuickSendPannel(){
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   const [recieverList, setRecieverList] = useState([]);
+  const [apiStatus, setApiStatus] = useState(false)
 
   const toggleQuickPannel = (newState) => () =>{
     setOpenQuickPannel(newState)
@@ -20,10 +21,20 @@ function QuickSendPannel(){
   useEffect(() => {
     if(debouncedQuery){
       const getRecieverDetails = async ()=>{
-        let res = await searchUser({queryString: debouncedQuery});
-        console.log('result', res)
-        if(res){
-          setRecieverList(res.data.userDetails)
+        setApiStatus(true)
+        try {
+          let res = await searchUser({queryString: debouncedQuery});
+          console.log('result', res)
+          if(res?.data?.userDetails){
+            setRecieverList(res.data.userDetails)
+            setApiStatus(false)
+          }else{
+            setApiStatus(false);
+            setRecieverList([]);
+          }
+        }catch(err){
+          console.error("Error fetching receiver details:", error);
+          setRecieverList([]);
         }
       }
       getRecieverDetails()
@@ -37,7 +48,7 @@ function QuickSendPannel(){
   useEffect(() => {
     const handler = setTimeout(()=>{
       setDebouncedQuery(query)
-    }, 500);
+    }, 700);
 
     return ()=>{
       clearTimeout(handler)
@@ -49,7 +60,7 @@ function QuickSendPannel(){
     <div style={{height: '96%'}}>
       <Button className="d-flex"
         variant="outlined" 
-        onClick={toggleQuickPannel(true)}
+        onClick={() => toggleQuickPannel(true)()}
         sx={{
           width: '100%', 
           height: '100%',
@@ -61,7 +72,7 @@ function QuickSendPannel(){
         >
           {/* background: 'linear-gradient(90deg, #feb47b, #ff7e5f)' */}
       </Button>
-      <Drawer open={openQuickPannel} onClose={toggleQuickPannel(false)} anchor="right">
+      <Drawer open={openQuickPannel} onClose={() => toggleQuickPannel(false)()} anchor="right">
         <Box sx={{ width: 400, height: '100%', background: 'transparent', overflow: 'hidden !important' }} role="presentation">
           <Paper className="d-flex" elevation={3} sx={{height: '100%', margin: '6px', overflow: 'hidden !important'}}>
             <Card sx={{ minWidth: 275, width: '100%' }}>
@@ -86,6 +97,7 @@ function QuickSendPannel(){
                     sx={{width: '100%'}}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
+                    disabled={apiStatus}
                     >
                   </TextField>
                 </div>

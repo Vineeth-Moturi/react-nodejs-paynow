@@ -8,9 +8,13 @@ async function searchUser(req, res){
         {username: {$regex: queryString, $options: 'i'}},
         {useremail: {$regex: queryString, $options: 'i'}},
       ]
-    });
-    console.log('user',users)
-    res.status(200).json({message: 'Reched searchUser Backend', userDetails: users})
+    })
+    .select('username userUid -_id')
+    .populate({
+        path: 'userInfo', 
+        select : 'profile_image_url firstname lastname country phone -_id'
+      });
+    res.status(200).json({message: 'Fetched successfully', userDetails: users})
   }catch{
     res.status(400).json({message: 'Something went wrong'})
   }
