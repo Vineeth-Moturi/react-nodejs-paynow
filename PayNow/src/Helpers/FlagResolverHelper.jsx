@@ -1,6 +1,4 @@
 
-import { useState } from "react";
-
 import {
   AF, AL, DZ, AS, AD, AO, AI, AG, AR, AM, AW, AU, AT, AZ,
   BS, BH, BD, BB, BY, BE, BZ, BJ, BM, BT, BO, BA, BW, BR,
@@ -20,7 +18,7 @@ import {
 } from 'country-flag-icons/react/3x2'
 
 export const FlagResolverHelper = (country) => {
-  const [flags, setFlags] = useState({
+  const flags = {
     'AF': <AF />, 'AL': <AL />, 'DZ': <DZ />, 'AS': <AS />, 'AD': <AD />, 'AO': <AO />, 'AI': <AI />,
     'AG': <AG />, 'AR': <AR />, 'AM': <AM />, 'AW': <AW />, 'AU': <AU />, 'AT': <AT />, 'AZ': <AZ />,
     'BS': <BS />, 'BH': <BH />, 'BD': <BD />, 'BB': <BB />, 'BY': <BY />, 'BE': <BE />, 'BZ': <BZ />,
@@ -50,18 +48,18 @@ export const FlagResolverHelper = (country) => {
     'TR': <TR />, 'TM': <TM />, 'TV': <TV />, 'UG': <UG />, 'UA': <UA />, 'AE': <AE />, 'GB': <GB />,
     'US': <US />, 'UY': <UY />, 'UZ': <UZ />, 'VU': <VU />, 'VE': <VE />, 'VN': <VN />, 'YE': <YE />,
     'ZM': <ZM />, 'ZW': <ZW />
-  });
+  };
 
   if(country){
     return flags[country];
   }else{
-    return undefined
+    return <span></span>
   }
 }
 
 
 export const CountriesList = (country_code) => {
-  const [countriesFF, setCountriesFF] = useState({
+  const countriesFF = {
     'AF': 'Afghanistan', 'AL': 'Albania', 'DZ': 'Algeria', 'AS': 'American Samoa', 'AD': 'Andorra', 'AO': 'Angola', 'AI': 'Anguilla',
     'AG': 'Antigua and Barbuda', 'AR': 'Argentina', 'AM': 'Armenia', 'AW': 'Aruba', 'AU': 'Australia', 'AT': 'Austria', 'AZ': 'Azerbaijan',
     'BS': 'Bahamas', 'BH': 'Bahrain', 'BD': 'Bangladesh', 'BB': 'Barbados', 'BY': 'Belarus', 'BE': 'Belgium', 'BZ': 'Belize',
@@ -91,7 +89,7 @@ export const CountriesList = (country_code) => {
     'TR': 'Turkey', 'TM': 'Turkmenistan', 'TV': 'Tuvalu', 'UG': 'Uganda', 'UA': 'Ukraine', 'AE': 'United Arab Emirates', 'GB': 'United Kingdom',
     'US': 'United States', 'UY': 'Uruguay', 'UZ': 'Uzbekistan', 'VU': 'Vanuatu', 'VE': 'Venezuela', 'VN': 'Vietnam', 'YE': 'Yemen',
     'ZM': 'Zambia', 'ZW': 'Zimbabwe'
-  });
+  };
 
   if(country_code){
     return countriesFF[country_code];

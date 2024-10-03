@@ -4,6 +4,10 @@ import axiosInstance from '../Helpers/AxiosApiHelper';
 
 export const BASE_URL = API_BASE_URL;
 
+export const usrPrep = (url) => {
+  return url ? BASE_URL+'/'+url : undefined ;
+}
+
 
 export const uploadFileApi = async (data, userEmail)=>{
   const uploadURL = BASE_URL + "/file/upload";
