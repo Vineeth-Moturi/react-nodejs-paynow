@@ -1,4 +1,4 @@
-import { IconButton, MenuItem, Menu } from "@mui/material";
+import { IconButton, MenuItem, Menu, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { useState } from "react";
 
@@ -35,6 +35,9 @@ function AccountMenu(){
 
   return(
     <>
+      <Typography variant='h10' sx={{fontWeight: '500', color: 'whitesmoke', marginLeft: '7%', alignItems: 'center'}}> 
+        {user?.userEmail} 
+      </Typography>
       <IconButton 
         onClick={handleClick}
         aria-controls= { isOpen ? 'account-btn' : undefined }

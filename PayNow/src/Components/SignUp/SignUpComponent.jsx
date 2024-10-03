@@ -14,6 +14,7 @@ import UserDetails from './StepFunctions/UserDetails';
 import Credentials from './StepFunctions/Credentials';
 import ProfileImage from './StepFunctions/ProfileImage';
 import { useSnackBar } from '../../Helpers/SnackBarHelper';
+import { CountriesList } from '../../Helpers/FlagResolverHelper';
 
 function SignUpComponent(){
   const [username, setUsername] = useState("");
@@ -35,7 +36,7 @@ function SignUpComponent(){
     {label: "FirstName", value: firstname, updateHandler: setFirstname, validationRegex: '', type: 'text'},
     {label: "LastName", value: lastname, updateHandler: setLastname, validationRegex: '', type: 'text'},
     {label: "Phone", value: phone, updateHandler: setPhone, validationRegex: '', type: 'text'},
-    {label: "Country", value: country, updateHandler: setCountry, validationRegex: '', type: 'text'}
+    {label: "Country", value: country, updateHandler: setCountry, categoryList: CountriesList() , validationRegex: '', type: 'select'}
   ])
 
   const CredentialsFields = useMemo(() => [
